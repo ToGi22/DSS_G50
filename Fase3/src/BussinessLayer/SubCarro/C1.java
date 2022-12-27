@@ -9,4 +9,5 @@ public class C1 {
     private int carID;
     private int potenciaICE;
 
+    public C1(){}
 }
