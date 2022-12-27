@@ -1,7 +1,6 @@
 package BussinessLayer;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Circuito{
@@ -16,12 +15,6 @@ public class Circuito{
 		CHICANE
 	}
 
-    private enum SegmentoEstrada{
-        CURVA,
-        RETA,
-        CHICANE;
-    }
-
     public Circuito(){
         this.nomeCir = null;
         this.distancia = 0;
@@ -30,7 +23,7 @@ public class Circuito{
         this.listaSegmentos = new ArrayList<SegmentoEstrada>();
     }
 
-    public Circuito(String nomeCir, double distancia, int numeroVoltas, int tempoBox, List<SegmentoEstrada> listaSegmentos) {
+    public Circuito(String nomeCir, double distancia, int numeroVoltas, int tempoBox, ArrayList<SegmentoEstrada> listaSegmentos) {
         this.nomeCir = nomeCir;
         this.distancia = distancia;
         this.numeroVoltas = numeroVoltas;
@@ -78,15 +71,15 @@ public class Circuito{
         this.tempoBox = tempoBox;
     }
 
-    public List<SegmentoEstrada> getListaSegmentos() {
+    public ArrayList<SegmentoEstrada> getListaSegmentos() {
         return (ArrayList<SegmentoEstrada>) this.listaSegmentos.stream().collect(Collectors.toList());
+    }
+
+    public void setListaSegmentos(ArrayList<SegmentoEstrada> listaSegmentos) {
+        this.listaSegmentos = listaSegmentos;
     }
 
     public void addSegmentoEstrada(SegmentoEstrada s) {
         this.listaSegmentos.add(s);
     }
-
-	public void setListaSegmentos(ArrayList<SegmentoEstrada> listaSegmentos) {
-		this.listaSegmentos = listaSegmentos;
-	}
 }
