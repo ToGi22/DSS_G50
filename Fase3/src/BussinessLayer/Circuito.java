@@ -19,9 +19,11 @@ public class Circuito{
         this.listaSegmentos = new ArrayList<SegmentoEstrada>();
     }
 
-    public enum SegmentoEstrada(){
+    private enum SegmentoEstrada{
         CURVA,
         RETA,
         CHICANE
     }
+
+
 }
