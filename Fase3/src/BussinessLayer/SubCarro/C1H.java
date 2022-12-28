@@ -13,16 +13,16 @@ public class C1H extends C1 {
         this.potenciaE = potenciaE;
     }
 
-    public C1H(C1 carro, int potenciaE) {
+    public C1H(C1 carro, int potenciaE){
         super(carro);
         this.potenciaE = potenciaE;
     }
 
-    public int getPotenciaE() {
+    public int getPotenciaE(){
         return this.potenciaE;
     }
 
-    public void setPotenciaE(int potenciaE) {
+    public void setPotenciaE(int potenciaE){
         this.potenciaE = potenciaE;
     }
 

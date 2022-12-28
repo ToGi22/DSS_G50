@@ -2,13 +2,13 @@ package BussinessLayer;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
  * Write a description of class Campeonato here.
  *
- * @author (your name)
- * @version (a version number or a date)
  */
 
 public class Campeonato{
@@ -81,5 +81,40 @@ public class Campeonato{
 
     // --- Métodos ---
 
+    // Função para validar o nome do campeonato
+    // O nome deve começar com uma letra
+    // O nome deve ter entre 5 a 29 caracteres
+    public static boolean verificaNomeCamp(String nomeCamp)
+    {
+
+        String regex = "^[A-Za-z]\\w{5,29}$";
+
+        Pattern p = Pattern.compile(regex);
+
+        if (nomeCamp == null) {
+            return false;
+        }
+        Matcher m = p.matcher(nomeCamp);
+
+        return m.matches();
+    }
+
+    // Função para validar o nome do circuito
+    // O nome deve começar com uma letra
+    // O nome deve ter entre 5 a 29 caracteres
+    public static boolean verificaNomeCir(String nomeCir)
+    {
+
+        String regex = "^[A-Za-z]\\w{5,29}$";
+
+        Pattern p = Pattern.compile(regex);
+
+        if (nomeCir == null) {
+            return false;
+        }
+        Matcher m = p.matcher(nomeCir);
+
+        return m.matches();
+    }
 
 }

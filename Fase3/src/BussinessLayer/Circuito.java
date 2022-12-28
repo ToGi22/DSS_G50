@@ -7,16 +7,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import BussinessLayer.Segmentos;
 
-public class Circuito{
-    
-    
+/**
+ * Write a description of class Circuito here.
+ *
+ */
 
+public class Circuito{
     private String nomeCir;
     private double distancia;
     private int numeroVoltas;
     private int tempoBox;
     private List<Segmentos> listaSegmentos;
 
+    // --- Empty Constructor ---
     public Circuito(){
         this.nomeCir = null;
         this.distancia = 0;
@@ -25,6 +28,7 @@ public class Circuito{
         this.listaSegmentos = new ArrayList<Segmentos>();
     }
 
+    // --- Parameterized Constructor ---
     public Circuito(String nomeCir, double distancia, int numeroVoltas, int tempoBox, List<Segmentos> listaSegmentos) {
         this.nomeCir = nomeCir;
         this.distancia = distancia;
@@ -33,6 +37,7 @@ public class Circuito{
         this.listaSegmentos = listaSegmentos;
     }
 
+    // --- Copy Constructor ---
     public Circuito(Circuito circuito){
         this.nomeCir = circuito.getNomeCir();
         this.distancia = circuito.getDistancia();
@@ -41,6 +46,8 @@ public class Circuito{
         this.listaSegmentos = circuito.getListaSegmentos();
     }
 
+
+    // --- Getters & Setters ---
     public String getNomeCir() {
         return this.nomeCir;
     }
@@ -81,6 +88,7 @@ public class Circuito{
         this.listaSegmentos.add(s);
     }
 
+    // --- Métodos ---
 
 
 
