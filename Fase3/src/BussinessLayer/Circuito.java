@@ -3,6 +3,7 @@ package BussinessLayer;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Circuito{
     private String nomeCir;
@@ -14,7 +15,7 @@ public class Circuito{
     private enum SegmentoEstrada{
         CURVA,
         RETA,
-        CHICANE
+        CHICANE;
     }
 
     public Circuito(){

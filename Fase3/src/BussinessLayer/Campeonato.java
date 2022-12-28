@@ -46,7 +46,7 @@ public class Campeonato{
         return this.nomeCamp;
     }
 
-    public String setNomeCamp(String nomeCamp){
+    public void setNomeCamp(String nomeCamp){
         this.nomeCamp = nomeCamp;
     }
 
@@ -54,7 +54,7 @@ public class Campeonato{
         return this.nrCorridas;
     }
 
-    public int setNrCorridas(int nrCorridas){
+    public void setNrCorridas(int nrCorridas){
         this.nrCorridas = nrCorridas;
     }
 
@@ -62,7 +62,7 @@ public class Campeonato{
         return this.nrMaxParticipantes;
     }
 
-    public int setNrMaxParticipantes(int nrMaxParticipantes){
+    public void setNrMaxParticipantes(int nrMaxParticipantes){
         this.nrMaxParticipantes = nrMaxParticipantes;
     }
 

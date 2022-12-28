@@ -8,7 +8,7 @@ public class Utilizador {
     private Boolean isAdmin;
     private Boolean isPremium;
 
-    public Utiilizador() {
+    public Utilizador() {
         this.codUtil = null;
         this.password = null;
         this.email = null;
@@ -26,7 +26,7 @@ public class Utilizador {
         this.isPremium = isPremium;
     }
 
-    public Utiilizador(Utilizador utilizador) {
+    public Utilizador(Utilizador utilizador) {
         this.codUtil = utilizador.getCodUtil();
         this.password = utilizador.getPassword();
         this.email = utilizador.getEmail();
