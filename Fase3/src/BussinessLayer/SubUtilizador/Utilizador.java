@@ -1,4 +1,4 @@
-package BussinessLayer;
+package BussinessLayer.SubUtilizador;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

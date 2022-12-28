@@ -1,4 +1,4 @@
-package BussinessLayer;
+package BussinessLayer.SubCampeonato;
 
 import java.util.ArrayList;
 import java.util.HashMap;

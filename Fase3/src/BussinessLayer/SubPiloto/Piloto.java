@@ -1,4 +1,4 @@
-package BussinessLayer;
+package BussinessLayer.SubPiloto;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -90,14 +90,11 @@ public class Piloto {
     {
 
         String regex = "^[A-Za-z]\\w{5,29}$";
-
         Pattern p = Pattern.compile(regex);
-
         if (nomePiloto == null) {
             return false;
         }
         Matcher m = p.matcher(nomePiloto);
-
         return m.matches();
     }
 }
