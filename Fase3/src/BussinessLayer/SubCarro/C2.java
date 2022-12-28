@@ -16,6 +16,9 @@ public class C2 extends Carro{
     public boolean verificaCilindrada(){
         return(this.getCilindrada() >= 3000 && this.getCilindrada() <= 5000);
     }
-  
+    
+    public boolean verificaFiabilidade(){
+        return (this.getFiabilidade() > 0.75 && this.getFiabilidade() < 0.85);
+    }
     
 }

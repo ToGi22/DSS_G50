@@ -17,5 +17,4 @@ public class SC extends Carro{
         return(this.getCilindrada() == 2500);
     }
  
- 
 }

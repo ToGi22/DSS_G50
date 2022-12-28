@@ -146,4 +146,8 @@ public class Carro {
     public void setModoMotor(ModoMotor modoMotor){
         this.modoMotor = modoMotor;
     }
+
+    public boolean verificaPac(){
+        return (this.downforce >= 0 && this.downforce <= 1);
+    }
 }
