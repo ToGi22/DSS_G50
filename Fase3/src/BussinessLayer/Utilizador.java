@@ -1,5 +1,8 @@
 package BussinessLayer;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Utilizador {
     private String codUtil;
     private String password;
@@ -83,4 +86,29 @@ public class Utilizador {
         this.isPremium = isPremium;
     }
 
+    public boolean verificaMail(String email)
+    {
+        String regex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
+                            "[a-zA-Z0-9_+&*-]+)*@" +
+                            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                            "A-Z]{2,7}$";
+                              
+        Pattern p = Pattern.compile(regex);
+        if (email == null)
+            return false;
+
+        return p.matcher(email).matches();
+    }
+    
+    public Boolean verificaPass(String password) {
+        String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20}$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    public void addPontuacaoGlobal(int pontuacaoCampeonato) {
+
+    }
 }
