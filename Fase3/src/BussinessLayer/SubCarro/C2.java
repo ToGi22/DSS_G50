@@ -18,7 +18,7 @@ public class C2 extends Carro{
     }
     
     public boolean verificaFiabilidade(){
-        return (this.getFiabilidade() > 0.75 && this.getFiabilidade() < 0.85);
+        return (this.getFiabilidade() > 0.80 && this.getFiabilidade() < 0.95); // fiabilidade dos C2 teórica é 80%, mas quanto maior a cilindrada, mais fiável
     }
     
 }

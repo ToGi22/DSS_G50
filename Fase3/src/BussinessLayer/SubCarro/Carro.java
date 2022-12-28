@@ -1,5 +1,7 @@
 package BussinessLayer.SubCarro;
 
+import java.util.Random;
+
 /**
  * Write a description of class Carro here.
  *
@@ -162,10 +164,46 @@ public class Carro {
         this.categoria = categoria;
     }
 
-
     // --- Métodos ---
 
     public boolean verificaPac(){
         return (this.downforce >= 0 && this.downforce <= 1);
     }
+
+
+    // Função que
+    public void geraFiabilidade(int min, int max) {
+        Random random = new Random();
+        int num = min + random.nextInt(max - min + 1);
+
+        this.setFiabilidade(num);
+    }
+
+    // Função
+    public void geraFiabilidade() {
+        Random random = new Random();
+        int min = 0;
+        int max = 0;
+        if (this.categoria == "C1" || this.categoria == "C1H"){
+            min = 90;
+            max = 95;
+        }
+        else if (this.categoria == "C2" || this.categoria == "C2H"){
+            min = 80;
+            max = 95;
+        }
+        else if (this.categoria == "GT" || this.categoria == "GTH"){
+            min = 75;
+            max = 95;
+        }
+        else {
+            min = 70;
+            max = 90;
+        }
+        int num = min + random.nextInt(max - min + 1);
+
+        this.setFiabilidade(num);
+    }
+
 }
+

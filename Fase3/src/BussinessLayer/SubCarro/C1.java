@@ -1,5 +1,7 @@
 package BussinessLayer.SubCarro;
 
+import java.util.Random;
+
 public class C1 extends Carro{
 
 
@@ -19,7 +21,7 @@ public class C1 extends Carro{
     }
 
     public boolean verificaFiabilidade(){
-        return (this.getFiabilidade() > 0.90 && this.getFiabilidade() < 0.96);
+        return (this.getFiabilidade() > 0.90 && this.getFiabilidade() < 0.95);
     }
-    
+
 }

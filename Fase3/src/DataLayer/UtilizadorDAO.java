@@ -10,8 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import BussinessLayer.Utilizador;
+import BussinessLayer.SubUtilizador.Utilizador;
 
 public class UtilizadorDAO implements Map<String,Utilizador>{
 	private static UtilizadorDAO singleton = null;
@@ -86,7 +85,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	// Método que devolve se um dado cricuito se encontra registada na base de dados
 	public boolean containsValue(Object value) {
 		Utilizador a = (Utilizador) value;
-        return this.containsKey(a.getNomeCir());
+        return this.containsKey(a.getCodUtil());
 	}
 
 	@Override
@@ -154,7 +153,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	//Método que adiciona de uma unica vez vários utilizadors à tabela na base de dados
 	public void putAll(Map<? extends String, ? extends Utilizador> m) {
 		for(Utilizador t : m.values()) {
-            this.put(t.getNomeCir(), t);
+            this.put(t.getCodUtil(), t);
         }		
 	}
 

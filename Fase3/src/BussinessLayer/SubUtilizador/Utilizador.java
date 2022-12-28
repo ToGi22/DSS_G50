@@ -134,4 +134,6 @@ public class Utilizador {
     public void addPontuacaoGlobal(int pontuacaoCampeonato) {
 
     }
+
+    
 }

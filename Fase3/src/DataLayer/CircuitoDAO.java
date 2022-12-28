@@ -10,8 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import BussinessLayer.Circuito;
+import BussinessLayer.SubCampeonato.Circuito;
 
 public class CircuitoDAO implements Map<String,Circuito>{
 	private static CircuitoDAO singleton = null;

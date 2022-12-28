@@ -10,8 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import BussinessLayer.Campeonato;
+import BussinessLayer.SubCampeonato.Campeonato;
 
 public class CampeonatoDAO implements Map<String,Campeonato>{
 	private static CampeonatoDAO singleton = null;

@@ -10,8 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import BussinessLayer.Piloto;
+import BussinessLayer.SubPiloto.Piloto;
 
 public class PilotoDAO implements Map<String,Piloto>{
 	private static PilotoDAO singleton = null;
