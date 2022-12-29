@@ -75,9 +75,9 @@ public class Campeonato{
         return (ArrayList<Circuito>) this.circuitosIntegrantes.stream().collect(Collectors.toList());
     }
 
-     public void addCircuito(Circuito circuito){
+    public void addCircuito(Circuito circuito){
         this.circuitosIntegrantes.add(circuito);
-     }
+    }
 
     // --- Métodos ---
 

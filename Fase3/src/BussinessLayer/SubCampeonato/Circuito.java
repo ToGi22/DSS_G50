@@ -1,11 +1,8 @@
 package BussinessLayer.SubCampeonato;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import BussinessLayer.Segmentos;
 
 /**
  * Write a description of class Circuito here.
