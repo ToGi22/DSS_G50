@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,12 +17,22 @@ public class CarroDAO implements Map<Integer,Carro>{
 	private CarroDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-            // String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
-            //         "Codigo varchar(10) NOT NULL PRIMARY KEY," +
-            //         "Distancia float(10) NOT NULL DEFAULT 0," +
-            //         "VerticeInicial varchar(10) DEFAULT 'n/d', foreign key(VerticeInicial) references vertices(Codigo),"+
-            //         "VerticeFinal varchar(10) DEFAULT 'n/d', foreign key(VerticeFinal) references vertices(Codigo))";
-            // stm.executeUpdate(sql);
+            String sql = "CREATE TABLE IF NOT EXISTS carro (" +
+                    "CarID INT NOT NULL PRIMARY KEY," +
+                    "Categoria varchar(10) NOT NULL ," +
+                    "Marca varchar(45) DEFAULT NULL ," +
+                    "Modelo varchar(45) DEFAULT NULL," +
+                    "Cilindrada INT NOT NULL," +
+                    "PotenciaICE INT NOT NULL," +
+                    "Fiabilidade INT NOT NULL," +
+                    "EstadoPneus INT NOT NULL,"+
+                    "TipoPneus varchar(45) NOT NULL,"+
+                    "ModoMotor varchar(45) NOT NULL,"+
+                    "PotenciaE INT DEFAULT NULL,"+
+                    "TaxaDeterioracaoGT INT DEFAULT NULL,"
+
+                                                                                                                    ;
+            stm.executeUpdate(sql);
 			;
         } catch (SQLException e) {
             e.printStackTrace();

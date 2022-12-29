@@ -17,12 +17,14 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	private UtilizadorDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-            // String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
-            //         "Codigo varchar(10) NOT NULL PRIMARY KEY," +
-            //         "Distancia float(10) NOT NULL DEFAULT 0," +
-            //         "VerticeInicial varchar(10) DEFAULT 'n/d', foreign key(VerticeInicial) references vertices(Codigo),"+
-            //         "VerticeFinal varchar(10) DEFAULT 'n/d', foreign key(VerticeFinal) references vertices(Codigo))";
-            // stm.executeUpdate(sql);
+             String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
+                     "CodUtil varchar(10) NOT NULL PRIMARY KEY," +
+                     "Email varchar(45) NOT NULL" +
+                     "Password varchar(45) NOT NULL" +
+                     "PontuacaoGlobal INT NOT NULL" +
+                     "IsAdmin BIT DEFAULT NULL" +
+                     "IsPremium BIT DEFAULT NULL";
+             stm.executeUpdate(sql);
 			;
         } catch (SQLException e) {
             e.printStackTrace();
