@@ -110,7 +110,7 @@ public class CircuitoDAO implements Map<String,Circuito>{
 	@Override
 	// Adiconar entrada á tabela dos circuitos na base de dados. O nome do circuito é a identificação do objeto na tabela
     // É lançada exceção caso haja algum problema relativo á database
-	public Circuito put(String key, Circuito value) {
+	public Circuito put(String key, Circuito cir) {
 		Circuito res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
@@ -119,10 +119,8 @@ public class CircuitoDAO implements Map<String,Circuito>{
             }
             else {
                 // Actualizar o aluno
-                stm.executeUpdate(""		// falta adicionar cenas
-                        // "INSERT INTO arestas VALUES ('" + value.getCodAresta() + "', '" + value.getDist() + "', '" + value.getVerticeInicial().getCodVertice() + "', '" + value.getVerticeFinal().getCodVertice() + "') " +
-                        //         "ON DUPLICATE KEY UPDATE Distancia=VALUES(Distancia), VerticeInicial=VALUES(VerticeInicial), VerticeFinal=VALUES(VerticeFinal)");
-				);
+                stm.executeUpdate(		// falta adicionar cenas
+                        "INSERT INTO arestas VALUES ('" + cir.getNomeCir() + "', '" + cir.getDistancia() + "', '" + cir.getNumeroVoltas() + "', '" + cir.getTempoBox() + "') " );
             }
         } catch (SQLException e) {
             // Database error!

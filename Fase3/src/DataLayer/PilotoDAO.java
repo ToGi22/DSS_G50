@@ -110,7 +110,7 @@ public class PilotoDAO implements Map<String,Piloto>{
 	@Override
 	// Adiconar entrada á tabela dos pilotos na base de dados. O nome do piloto é a identificação do objeto na tabela
     // É lançada exceção caso haja algum problema relativo á database
-	public Piloto put(String key, Piloto value) {
+	public Piloto put(String key, Piloto p) {
 		Piloto res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
@@ -119,10 +119,8 @@ public class PilotoDAO implements Map<String,Piloto>{
             }
             else {
                 // Actualizar o aluno
-                stm.executeUpdate(""		// falta adicionar cenas
-                        // "INSERT INTO arestas VALUES ('" + value.getCodAresta() + "', '" + value.getDist() + "', '" + value.getVerticeInicial().getCodVertice() + "', '" + value.getVerticeFinal().getCodVertice() + "') " +
-                        //         "ON DUPLICATE KEY UPDATE Distancia=VALUES(Distancia), VerticeInicial=VALUES(VerticeInicial), VerticeFinal=VALUES(VerticeFinal)");
-				);
+                stm.executeUpdate(		// falta adicionar cenas
+                        "INSERT INTO arestas VALUES ('" + p.getNomePiloto() + "', '" + p.getCts() + "', '" + p.getSva() + "', '" + p.getNacionalidade() + "') " );
             }
         } catch (SQLException e) {
             // Database error!

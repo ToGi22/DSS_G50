@@ -25,6 +25,7 @@ public class CarroDAO implements Map<Integer,Carro>{
                     "Cilindrada INT NOT NULL," +
                     "PotenciaICE INT NOT NULL," +
                     "Fiabilidade INT NOT NULL," +
+                    "Downforce INT NOT NULL"+
                     "EstadoPneus INT NOT NULL,"+
                     "TipoPneus varchar(45) NOT NULL,"+
                     "ModoMotor varchar(45) NOT NULL,"+
@@ -119,7 +120,7 @@ public class CarroDAO implements Map<Integer,Carro>{
 	@Override
 	// Adiconar entrada á tabela dos carros na base de dados. O carId do carro é a identificação do objeto na tabela
     // É lançada exceção caso haja algum problema relativo á database
-	public Carro put(Integer key, Carro value) {
+	public Carro put(Integer key, Carro c) {
 		Carro res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
@@ -128,13 +129,12 @@ public class CarroDAO implements Map<Integer,Carro>{
             }
             else {
                 // Actualizar o aluno
-                stm.executeUpdate(""		// falta adicionar cenas
-                        // "INSERT INTO arestas VALUES ('" + value.getCodAresta() + "', '" + value.getDist() + "', '" + value.getVerticeInicial().getCodVertice() + "', '" + value.getVerticeFinal().getCodVertice() + "') " +
-                        //         "ON DUPLICATE KEY UPDATE Distancia=VALUES(Distancia), VerticeInicial=VALUES(VerticeInicial), VerticeFinal=VALUES(VerticeFinal)");
-				);
+                stm.executeUpdate(		// falta ver como tratar de meter a taxa de deterioração se o carro for GT e a PoteciaE se o carro for eletrico (podemos utilizar "instaceof") exemplo: if c instanceof GT
+                        "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
+                        + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +"NULL" + "', '" + "NULL" + "')");
             }
         } catch (SQLException e) {
-            // Database error!
+             //Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }

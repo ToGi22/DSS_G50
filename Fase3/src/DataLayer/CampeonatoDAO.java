@@ -19,8 +19,8 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
             Statement stm = conn.createStatement()) {
              String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
                         "NomeCamp varchar(10) NOT NULL PRIMARY KEY)"+
-                        "nrCorridas INT NOT ,"+
-                        "nrMaxParticipantes INT NOT ,";
+                        "nrCorridas INT NOT NULL ,"+
+                        "nrMaxParticipantes INT NOT NULL ,";
              stm.executeUpdate(sql);
 			;
         } catch (SQLException e) {
@@ -108,7 +108,7 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
 	@Override
 	// Adiconar entrada á tabela dos campeonatos na base de dados. O nome do campeonato é a identificação do objeto na tabela
     // É lançada exceção caso haja algum problema relativo á database
-	public Campeonato put(String key, Campeonato value) {
+	public Campeonato put(String key, Campeonato camp) {
 		Campeonato res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
@@ -117,10 +117,9 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
             }
             else {
                 // Actualizar o aluno
-                stm.executeUpdate(""		// falta adicionar cenas
-                        // "INSERT INTO arestas VALUES ('" + value.getCodAresta() + "', '" + value.getDist() + "', '" + value.getVerticeInicial().getCodVertice() + "', '" + value.getVerticeFinal().getCodVertice() + "') " +
-                        //         "ON DUPLICATE KEY UPDATE Distancia=VALUES(Distancia), VerticeInicial=VALUES(VerticeInicial), VerticeFinal=VALUES(VerticeFinal)");
-				);
+                stm.executeUpdate(		// falta adicionar cenas
+                        "INSERT INTO arestas VALUES ('" + camp.getNomeCamp() + "', '" + camp.getNrCorridas() + "', '" + camp.getNrMaxParticipantes() + "') " );
+				
             }
         } catch (SQLException e) {
             // Database error!

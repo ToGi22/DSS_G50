@@ -111,7 +111,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	@Override
 	// Adiconar entrada á tabela dos utilizadors na base de dados. O nome do utilizador é a identificação do objeto na tabela
     // É lançada exceção caso haja algum problema relativo á database
-	public Utilizador put(String key, Utilizador value) {
+	public Utilizador put(String key, Utilizador u) {
 		Utilizador res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
@@ -120,10 +120,8 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
             }
             else {
                 // Actualizar o aluno
-                stm.executeUpdate(""		// falta adicionar cenas
-                        // "INSERT INTO arestas VALUES ('" + value.getCodAresta() + "', '" + value.getDist() + "', '" + value.getVerticeInicial().getCodVertice() + "', '" + value.getVerticeFinal().getCodVertice() + "') " +
-                        //         "ON DUPLICATE KEY UPDATE Distancia=VALUES(Distancia), VerticeInicial=VALUES(VerticeInicial), VerticeFinal=VALUES(VerticeFinal)");
-				);
+                stm.executeUpdate(		// falta adicionar cenas
+                        "INSERT INTO arestas VALUES ('" + u.getCodUtil() + "', '" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getPontuacaoGlobal() + "', '" + u.getIsAdmin() + "', '" + u.getIsPremium() + "') " );
             }
         } catch (SQLException e) {
             // Database error!
