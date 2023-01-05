@@ -5,7 +5,7 @@ public class GTH extends GT{
 
     
 
-    public GTH(double downforce, double fiabilidade, int estadoPneus, String marca, String modelo, int carID, int potenciaICE, int cilindrada, String categoria, TipoPneus tipoPneus, ModoMotor modoMotor, int taxaDeterioracao, int potenciaE) {
+    public GTH(double downforce, double fiabilidade, int estadoPneus, String marca, String modelo, int carID, int potenciaICE, int cilindrada, String categoria, TipoPneus tipoPneus, ModoMotor modoMotor, double taxaDeterioracao, int potenciaE) {
         super(downforce, fiabilidade, estadoPneus, marca, modelo, carID, potenciaICE, cilindrada, categoria, tipoPneus,modoMotor,taxaDeterioracao);
         this.potenciaE = potenciaE;
     }

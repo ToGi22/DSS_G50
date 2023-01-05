@@ -1,4 +1,4 @@
-package uminho.dss.trabalhopratico.ui;
+package UI;
 
 import java.util.ArrayList;
 import java.util.Arrays;

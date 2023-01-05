@@ -26,14 +26,14 @@ public class Campeonato{
     }
 
     // --- Parameterized Constructors ---
-    public Campeonato(String nomeCamp, int nrCorridas, int nrMaxParticipantes, ArrayList<String> circuitosIntegrantes){
+    public Campeonato(String nomeCamp, int nrCorridas, int nrMaxParticipantes, ArrayList<Circuito> circuitosIntegrantes){
         this.nomeCamp = nomeCamp;
         this.nrCorridas = nrCorridas;
         this.nrMaxParticipantes = nrMaxParticipantes;
         this.circuitosIntegrantes = circuitosIntegrantes;
     }
 
-    public Campeonato(String nomeCamp, int nrMaxParticipantes, ArrayList<String> circuitosIntegrantes){
+    public Campeonato(String nomeCamp, int nrMaxParticipantes, ArrayList<Circuito> circuitosIntegrantes){
         this.nomeCamp = nomeCamp;
         this.nrMaxParticipantes = nrMaxParticipantes;
         this.circuitosIntegrantes = circuitosIntegrantes;

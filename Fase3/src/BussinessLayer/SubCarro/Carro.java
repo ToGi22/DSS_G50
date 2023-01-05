@@ -166,10 +166,6 @@ public class Carro {
 
     // --- Métodos ---
 
-    public boolean verificaPac(){
-        return (this.downforce >= 0 && this.downforce <= 1);
-    }
-
     // Função que gera a fiabilidade mediante a categoria de um carro
     public void geraFiabilidade() {
         Random random = new Random();
@@ -198,19 +194,25 @@ public class Carro {
 
     // Função que atualiza o valor de estado de pneu 
     public void atualizaEstadoPneu(){
-        estadoAtual = this.getEstadoPneus();
-        modoMotorAtual = this.getModoMotor();
-        if (modoMotorAtual == this.NORMAL) {
+        int estadoAtual = this.getEstadoPneus();
+        ModoMotor modoMotorAtual = this.getModoMotor();
+        if (modoMotorAtual == ModoMotor.NORMAL) {
             this.setEstadoPneus(estadoAtual - 2);
-        } 
-        else if (modoMotorAtual == this.CONSERVADOR){
+        }
+        else if (modoMotorAtual == ModoMotor.CONSERVADOR){
             this.setEstadoPneus(estadoAtual - 1); 
         }
-        else {
+        else if (modoMotorAtual == ModoMotor.AGRESSIVO){
             this.setEstadoPneus(estadoAtual - 4);
+        }
+        else {
+            // TO-DO falta criar excecoes
         }
     }
 
-
+    // Função que verifica se o valor de PAC de um carro é válido
+    public boolean verificaPac(){
+        return (this.downforce >= 0 && this.downforce <= 1);
+    }
 }
 

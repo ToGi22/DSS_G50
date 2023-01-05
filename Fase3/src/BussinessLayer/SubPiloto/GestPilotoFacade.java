@@ -1,5 +1,11 @@
 package BussinessLayer.SubPiloto;
 
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import DataLayer.PilotoDAO;
+
 public class GestPilotoFacade implements IPiloto{
     private Map<String,Piloto> pilotos;
 
@@ -9,7 +15,7 @@ public class GestPilotoFacade implements IPiloto{
 
     // Função que regista um objeto piloto na base de dados
     public void registaPiloto(String nomePiloto, double cvs,double sva, String nacionalidade) {
-        Piloto pilot = new Piloto(nome, cvs, sva, nacionalidade);
+        Piloto pilot = new Piloto(nomePiloto, cvs, sva, nacionalidade);
         this.pilotos.put(pilot.getNomePiloto(), pilot);
     }
 
@@ -18,16 +24,6 @@ public class GestPilotoFacade implements IPiloto{
     }
 
     // --- Métodos --- 
-
-    // Função para verificar a perícia CTS (Chuva vs Tempo Seco)
-    public boolean verificaCts(){
-        return (this.getCts() >= 0 && this.getCts() <= 1);
-    }
-
-    // Função para verificar a perícia SVA (Segurança vs Agressividade)
-    public boolean verificaSva(){
-        return (this.getSva() >= 0 && this.getSva() <= 1);
-    }
 
     // Função para validar o nome do piloto
     // O nome deve começar com uma letra maiuscula
@@ -47,4 +43,5 @@ public class GestPilotoFacade implements IPiloto{
     public boolean verificaPiloto(String nomePiloto){
         return pilotos.containsKey(nomePiloto);
     }
+
 }

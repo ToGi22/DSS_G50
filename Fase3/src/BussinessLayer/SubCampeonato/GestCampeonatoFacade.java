@@ -1,22 +1,26 @@
 package BussinessLayer.SubCampeonato;
 
 
-import java.sql.Array;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class GestCampeonatosFacade implements ICampeonato{
+import DataLayer.CampeonatoDAO;
+import DataLayer.CircuitoDAO;
+
+public class GestCampeonatoFacade implements ICampeonato{
     private Map<String, Campeonato> campeonatos;
     private Map<String, Circuito> circuitos;
     
 
-    public GestCampeonatosFacade(){
+    public GestCampeonatoFacade(){
         this.campeonatos = CampeonatoDAO.getInstance();
         this.circuitos = CircuitoDAO.getInstance();
     }
 
-    public void registaCircuito(String nomeCir, double distancia, int numeroVoltas, ArrayList<SegmentoEstrada> listaSegmentos){
-        Circuito c = new Circuito(nomeCir, distancia, numeroVoltas, listaSegmentos);
+    public void registaCircuito(String nomeCir, double distancia, int numeroVoltas, ArrayList<Segmentos> listaSegmentos){
+        Circuito c = new Circuito(nomeCir, distancia, numeroVoltas, 0, listaSegmentos); // TO-DO falta definir como vamos fazer com o tempoBox
         this.circuitos.put(c.getNomeCir(),c);
     }
 
@@ -83,4 +87,5 @@ public class GestCampeonatosFacade implements ICampeonato{
 
         return m.matches();
     }
+
 }
