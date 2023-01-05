@@ -84,10 +84,4 @@ public class Circuito{
     public void addSegmentoEstrada(Segmentos s) {
         this.listaSegmentos.add(s);
     }
-
-    // --- Métodos ---
-
-
-
-
 }

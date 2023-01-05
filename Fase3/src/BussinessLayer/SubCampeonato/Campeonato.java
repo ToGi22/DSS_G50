@@ -25,12 +25,19 @@ public class Campeonato{
         this.circuitosIntegrantes = new ArrayList<Circuito>();
     }
 
-    // --- Parameterized Constructor ---
-    public Campeonato(String nomeCamp, int nrCorridas, int nrMaxParticipantes, ArrayList<Circuito> circuitosIntegrantes){
+    // --- Parameterized Constructors ---
+    public Campeonato(String nomeCamp, int nrCorridas, int nrMaxParticipantes, ArrayList<String> circuitosIntegrantes){
         this.nomeCamp = nomeCamp;
         this.nrCorridas = nrCorridas;
         this.nrMaxParticipantes = nrMaxParticipantes;
         this.circuitosIntegrantes = circuitosIntegrantes;
+    }
+
+    public Campeonato(String nomeCamp, int nrMaxParticipantes, ArrayList<String> circuitosIntegrantes){
+        this.nomeCamp = nomeCamp;
+        this.nrMaxParticipantes = nrMaxParticipantes;
+        this.circuitosIntegrantes = circuitosIntegrantes;
+        this.nrCorridas = circuitosIntegrantes.size();
     }
 
     // --- Copy Constructor ---
@@ -79,42 +86,5 @@ public class Campeonato{
         this.circuitosIntegrantes.add(circuito);
     }
 
-    // --- Métodos ---
-
-    // Função para validar o nome do campeonato
-    // O nome deve começar com uma letra
-    // O nome deve ter entre 5 a 29 caracteres
-    public static boolean verificaNomeCamp(String nomeCamp)
-    {
-
-        String regex = "^[A-Za-z]\\w{5,29}$";
-
-        Pattern p = Pattern.compile(regex);
-
-        if (nomeCamp == null) {
-            return false;
-        }
-        Matcher m = p.matcher(nomeCamp);
-
-        return m.matches();
-    }
-
-    // Função para validar o nome do circuito
-    // O nome deve começar com uma letra
-    // O nome deve ter entre 5 a 29 caracteres
-    public static boolean verificaNomeCir(String nomeCir)
-    {
-
-        String regex = "^[A-Za-z]\\w{5,29}$";
-
-        Pattern p = Pattern.compile(regex);
-
-        if (nomeCir == null) {
-            return false;
-        }
-        Matcher m = p.matcher(nomeCir);
-
-        return m.matches();
-    }
 
 }

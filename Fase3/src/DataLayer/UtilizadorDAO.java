@@ -213,7 +213,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	}
 
 	@Override
-	// Método que devolve um set com todos "pares" formados pelo nome do utilizador e o objeto utilizador correspondente
+	// Método que devolve um set com todos os "pares" formados pelo nome do utilizador e o objeto utilizador correspondente
     // É lançada exceção caso haja algum problema com a base de dados
 	public Set<Entry<String, Utilizador>> entrySet() {
 		Map.Entry<String,Utilizador> entry;

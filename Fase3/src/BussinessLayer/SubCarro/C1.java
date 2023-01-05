@@ -16,12 +16,10 @@ public class C1 extends Carro{
         super(carro);
     }
 
-    public boolean verificaCilindrada(){
-        return (this.getCilindrada() == 6000);
-    }
-
+    // Função que verifica se o valor da fiabilidade de um carro é válido 
     public boolean verificaFiabilidade(){
         return (this.getFiabilidade() > 0.90 && this.getFiabilidade() < 0.95);
     }
+
 
 }

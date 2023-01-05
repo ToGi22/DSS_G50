@@ -170,16 +170,7 @@ public class Carro {
         return (this.downforce >= 0 && this.downforce <= 1);
     }
 
-
-    // Função que
-    public void geraFiabilidade(int min, int max) {
-        Random random = new Random();
-        int num = min + random.nextInt(max - min + 1);
-
-        this.setFiabilidade(num);
-    }
-
-    // Função
+    // Função que gera a fiabilidade mediante a categoria de um carro
     public void geraFiabilidade() {
         Random random = new Random();
         int min = 0;
@@ -204,6 +195,22 @@ public class Carro {
 
         this.setFiabilidade(num);
     }
+
+    // Função que atualiza o valor de estado de pneu 
+    public void atualizaEstadoPneu(){
+        estadoAtual = this.getEstadoPneus();
+        modoMotorAtual = this.getModoMotor();
+        if (modoMotorAtual == this.NORMAL) {
+            this.setEstadoPneus(estadoAtual - 2);
+        } 
+        else if (modoMotorAtual == this.CONSERVADOR){
+            this.setEstadoPneus(estadoAtual - 1); 
+        }
+        else {
+            this.setEstadoPneus(estadoAtual - 4);
+        }
+    }
+
 
 }
 

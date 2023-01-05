@@ -51,6 +51,4 @@ public class Segmentos {
     public void setGdu(int gdu) {
         this.gdu = gdu;
     }
-
-    // --- Métodos ---
 }
