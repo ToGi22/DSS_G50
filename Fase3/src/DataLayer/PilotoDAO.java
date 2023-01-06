@@ -18,10 +18,10 @@ public class PilotoDAO implements Map<String,Piloto>{
 	private PilotoDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-             String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
+             String sql = "CREATE TABLE IF NOT EXISTS piloto (" +
                      "NomePiloto varchar(10) NOT NULL PRIMARY KEY," +
-                     "Cts DOUBLE NOT NULL," +
-                     "Sva DOUBLE NOT NULL," +
+                     "Cts DOUBLE DEFAULT 0.0," +
+                     "Sva DOUBLE DEFAULT 0.0," +
                      "Nacionalidade varchar(45) NOT NULL";
              stm.executeUpdate(sql);
 			;
@@ -92,19 +92,19 @@ public class PilotoDAO implements Map<String,Piloto>{
 	// Método que devolve o piloto cujo nome é o passado como argumento
     // Lança exceção caso haja algum problema na procura na base de dados
 	public Piloto get(Object key) {
-		Piloto a = null;
+		Piloto p = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("'"+key+"'")) {	// falta adicionar cenas
-            if (rs.next()) {  // A chave existe na tabela
-                // TODO
-            }
+            ResultSet rs = stm.executeQuery("SELECT * FROM piloto WHERE nomePiloto='"+key+"'")) {
+                if (rs.next()) {  // A chave existe na tabela
+                    p = new Piloto(rs.getString(1),rs.getDouble(2),rs.getDouble(3),rs.getString(4));
+                }
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return a;
+        return p;
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class PilotoDAO implements Map<String,Piloto>{
             else {
                 // Actualizar o aluno
                 stm.executeUpdate(		// falta adicionar cenas
-                        "INSERT INTO arestas VALUES ('" + p.getNomePiloto() + "', '" + p.getCts() + "', '" + p.getSva() + "', '" + p.getNacionalidade() + "') " );
+                        "INSERT INTO piloto VALUES ('" + p.getNomePiloto() + "', '" + p.getCts() + "', '" + p.getSva() + "', '" + p.getNacionalidade() + "') " );
             }
         } catch (SQLException e) {
             // Database error!
@@ -162,12 +162,7 @@ public class PilotoDAO implements Map<String,Piloto>{
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {	// falta adicionar cenas
-            // stm.execute("UPDATE robots SET Rota=NULL");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
-            // stm.executeUpdate("TRUNCATE rotas");
-            // stm.executeUpdate("TRUNCATE arestasRotas");
-            // stm.executeUpdate("TRUNCATE arestas");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
+            stm.executeUpdate("TRUNCATE piloto");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
@@ -197,19 +192,23 @@ public class PilotoDAO implements Map<String,Piloto>{
 	// Método que devolve uma collection com todos os objetos pilotos presentes na base de dados
     // É lançada exceção caso haja algum problema com a base de dados
 	public Collection<Piloto> values() {
-		Collection<Piloto> col = new HashSet<>();
+		Collection<Piloto> res = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("")) {	// "SELECT Codigo FROM arestas"
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT nomePiloto FROM piloto")) {
             while (rs.next()) {
-                // col.add(this.get(rs.getString("Codigo"))); // falta adicionar cenas acho eu
+                String idC = rs.getString("nomePiloto"); // Obtemos um id do carro do ResultSet
+                Piloto c = this.get(idC);                    // Utilizamos o get para construir os carros uma a uma
+                res.add(c);                                 // Adiciona o carro ao resultado.
             }
         } catch (Exception e) {
+            // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return col;
-	}
+        return res;
+    }
+
 
 	@Override
 	// Método que devolve um set com todos "pares" formados pelo nome do piloto e o objeto piloto correspondente

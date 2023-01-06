@@ -5,12 +5,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import BussinessLayer.SubCampeonato.Circuito;
+import BussinessLayer.SubCampeonato.Segmentos;
+import BussinessLayer.SubCampeonato.Segmentos.SegmentoEstrada;
 
 public class CircuitoDAO implements Map<String,Circuito>{
 	private static CircuitoDAO singleton = null;
@@ -18,11 +20,18 @@ public class CircuitoDAO implements Map<String,Circuito>{
 	private CircuitoDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-             String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
+             String sql = "CREATE TABLE IF NOT EXISTS circuitos (" +
                         "nomeCir varchar(30) NOT NULL," +
                         "distancia double NOT NULL,"+
                         "n_voltas int NOT NULL," +
                         "TempoBox int NOT NULL,";
+
+                    sql = "CREATE TABLE IF NOT EXISTS SegmentoEstrada(" +
+                    "nomeCir varchar(30) NOT NULL," +
+                    "tipoSegmento int NOT NULL,"+
+                    "gdu double NOT NULL,"+
+                    "PRIMARY KEY (nomeCir,tipoSegmento),"+
+                    "foreign key(nomeCir) references circuito(nomeCir))";
              stm.executeUpdate(sql);
 			;
         } catch (SQLException e) {
@@ -72,7 +81,7 @@ public class CircuitoDAO implements Map<String,Circuito>{
         try	(Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			Statement stm = conn.createStatement();
 			ResultSet rs =
-			stm.executeQuery("'"+key.toString()+"'")) {	// falta adicionar cenas
+			stm.executeQuery("SELECT nomeCir FROM circuito WHERE nomeCir='"+key.toString()+"'")) {	// falta adicionar cenas
             r = rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,43 +101,64 @@ public class CircuitoDAO implements Map<String,Circuito>{
 	// Método que devolve o circuito cujo nome é o passado como argumento
     // Lança exceção caso haja algum problema na procura na base de dados
 	public Circuito get(Object key) {
-		Circuito a = null;
+		Circuito c = null;
+        ArrayList<Segmentos> segmentos = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("'"+key+"'")) {	// falta adicionar cenas
+        Statement stm = conn.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT * FROM circuito WHERE nomeCircuito='"+key+"'")) {	// falta adicionar cenas
             if (rs.next()) {  // A chave existe na tabela
-                // TODO
+                ResultSet r = stm.executeQuery("SELECT * FROM SeccaoCircuito WHERE nomeCircuito='"+key+"'");
+                while(r.next()) {
+                    SegmentoEstrada seg = null;
+                    int inteiro = r.getInt(2);
+                    switch(inteiro){
+                        case 1:
+                            seg = SegmentoEstrada.CURVA;
+                        case 2:
+                            seg = SegmentoEstrada.RETA;
+                        case 3:
+                            seg = SegmentoEstrada.CHICANE;
+                    }
+                    Segmentos s = new Segmentos(seg,r.getInt(3));
+                    segmentos.add(s);
+
+            }
+            c = new Circuito(rs.getString(1),rs.getDouble(2),rs.getInt(3),rs.getInt(4),segmentos);
+
             }
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return a;
+        return c;
 	}
 
 	@Override
 	// Adiconar entrada á tabela dos circuitos na base de dados. O nome do circuito é a identificação do objeto na tabela
     // É lançada exceção caso haja algum problema relativo á database
-	public Circuito put(String key, Circuito cir) {
+	public Circuito put(String key, Circuito c) {
 		Circuito res = null;
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement()) {
-            if(this.containsKey(key)){
-                res = this.get(key);
-            }
-            else {
-                // Actualizar o aluno
-                stm.executeUpdate(		// falta adicionar cenas
-                        "INSERT INTO arestas VALUES ('" + cir.getNomeCir() + "', '" + cir.getDistancia() + "', '" + cir.getNumeroVoltas() + "', '" + cir.getTempoBox() + "') " );
-            }
+        if (!this.containsKey(key)) {
+            try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+                 Statement stm = conn.createStatement()) {
+                
+                stm.executeUpdate(
+                        "INSERT INTO circuito VALUES ('" + c.getNomeCir() + "', '" +c.getDistancia()+ "', '" +c.getNumeroVoltas() + "', '" +c.getTempoBox() + "')"
+                );
+                for (Segmentos m : c.getListaSegmentos()) {
+                    stm.executeUpdate(
+                            "INSERT INTO SegmentoEstrada VALUES ('" + c.getNomeCir() + "', '" +m.getSegmento()+ "', '" +m.getGdu() + "') "
+                    );
+                }
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return res;
 	}
+    return res;
+}
 
 	@Override
 	// Método que remove da tabela dos circuitos na database, o cicuito cujo nome é passado como argumento.
@@ -138,7 +168,8 @@ public class CircuitoDAO implements Map<String,Circuito>{
 		Circuito t = this.get(key);
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-            // stm.executeUpdate("DELETE FROM arestas WHERE Codigo='"+key+"'");
+            stm.executeUpdate("DELETE FROM circuito WHERE nomeCir='"+key+"'");
+            stm.executeUpdate("DELETE FROM SegmentoEstrada WHERE nomeCir='"+key+"'");
         } catch (Exception e) {
             // Database error!
             e.printStackTrace();
@@ -162,12 +193,8 @@ public class CircuitoDAO implements Map<String,Circuito>{
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {	// falta adicionar cenas
-            // stm.execute("UPDATE robots SET Rota=NULL");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
-            // stm.executeUpdate("TRUNCATE rotas");
-            // stm.executeUpdate("TRUNCATE arestasRotas");
-            // stm.executeUpdate("TRUNCATE arestas");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
+            stm.executeUpdate("TRUNCATE circuito");
+            stm.executeUpdate("TRUNCATE SeccaoCircuito");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
@@ -197,18 +224,20 @@ public class CircuitoDAO implements Map<String,Circuito>{
 	// Método que devolve uma collection com todos os objetos circuitos presentes na base de dados
     // É lançada exceção caso haja algum problema com a base de dados
 	public Collection<Circuito> values() {
-		Collection<Circuito> col = new HashSet<>();
+		Collection<Circuito> res = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("")) {	// "SELECT Codigo FROM arestas"
+            ResultSet rs = stm.executeQuery("SELECT nomeCircuito FROM circuito")) {	// "SELECT Codigo FROM arestas"
             while (rs.next()) {
-                // col.add(this.get(rs.getString("Codigo"))); // falta adicionar cenas acho eu
+                String idC = rs.getString("nomeCircuito");  
+                Circuito c = this.get(idC);                    
+                res.add(c);
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return col;
+        return res;
 	}
 
 	@Override

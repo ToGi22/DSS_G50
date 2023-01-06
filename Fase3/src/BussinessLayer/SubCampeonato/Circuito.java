@@ -17,8 +17,8 @@ public class Circuito{
     private List<Segmentos> listaSegmentos;
 
     // --- Empty Constructor ---
-    public Circuito(){
-        this.nomeCir = null;
+    public Circuito(String nomeCir){
+        this.nomeCir = nomeCir;
         this.distancia = 0;
         this.numeroVoltas= 0;
         this.tempoBox = 0;

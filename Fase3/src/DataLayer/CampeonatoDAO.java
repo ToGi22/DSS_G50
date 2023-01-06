@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import BussinessLayer.SubCampeonato.Campeonato;
+import BussinessLayer.SubCampeonato.Circuito;
 
 public class CampeonatoDAO implements Map<String,Campeonato>{
 	private static CampeonatoDAO singleton = null;
@@ -17,10 +19,13 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
 	private CampeonatoDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-             String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
-                        "NomeCamp varchar(10) NOT NULL PRIMARY KEY)"+
+             String sql = "CREATE TABLE IF NOT EXISTS campeonatos (" +
+                        "NomeCamp varchar(10) NOT NULL,"+
                         "nrCorridas INT NOT NULL ,"+
-                        "nrMaxParticipantes INT NOT NULL ,";
+                        "nrMaxParticipantes INT NOT NULL ,"+
+                        "nomeCir varchar(45) NOT NULL ,"+
+                        "PRIMARY KEY (NomeCamp,nomeCir),"+
+                        "foreign key(nomeCir) references circuito(nomeCir))";
              stm.executeUpdate(sql);
 			;
         } catch (SQLException e) {
@@ -44,7 +49,7 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
 		int i = 0;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			Statement stm = conn.createStatement();
-			ResultSet rs = stm.executeQuery("######")) {	// falta adicionar isto
+			ResultSet rs = stm.executeQuery("")) {	// falta adicionar isto
             if(rs.next()) {
                 i = rs.getInt(1);
             }
@@ -90,19 +95,23 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
 	// Método que devolve o campeonato cujo nome é o passado como argumento
     // Lança exceção caso haja algum problema na procura na base de dados
 	public Campeonato get(Object key) {
-		Campeonato a = null;
+		Campeonato camp = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("'"+key+"'")) {	// falta adicionar cenas
-            if (rs.next()) {  // A chave existe na tabela
-                // TODO
-            }
+            ResultSet rs = stm.executeQuery("SELECT * FROM campeonatos WHERE NomeCamp='"+key+"'")) {
+                // A chave existe na tabela
+              ArrayList<Circuito> listaCircuitos =new ArrayList<>();
+              while (rs.next()) {
+                      listaCircuitos.add(new Circuito(rs.getString(2)));
+              }
+              camp=new Campeonato(key.toString(),rs.getInt(2),rs.getInt(3),listaCircuitos);
+  
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return a;
+        return camp;
 	}
 
 	@Override
@@ -110,21 +119,19 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
     // É lançada exceção caso haja algum problema relativo á database
 	public Campeonato put(String key, Campeonato camp) {
 		Campeonato res = null;
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement()) {
-            if(this.containsKey(key)){
-                res = this.get(key);
-            }
-            else {
-                // Actualizar o aluno
-                stm.executeUpdate(		// falta adicionar cenas
-                        "INSERT INTO arestas VALUES ('" + camp.getNomeCamp() + "', '" + camp.getNrCorridas() + "', '" + camp.getNrMaxParticipantes() + "') " );
-				
-            }
+        if (!this.containsKey(key)) {
+            try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+                 Statement stm = conn.createStatement()) {
+                // Actualizar a turma
+                for (Circuito circuito : camp.getCircuitosIntegrantes() ){
+                    stm.executeUpdate(
+                        "INSERT INTO campeonato VALUES ('" + camp.getNomeCamp() + "', '" + camp.getNrCorridas() + "', '" + camp.getNrMaxParticipantes()+ "', '" + circuito.getNomeCir() + "') " );
+                }
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
+        }
         }
         return res;
 	}
@@ -137,7 +144,7 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
 		Campeonato t = this.get(key);
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-            // stm.executeUpdate("DELETE FROM arestas WHERE Codigo='"+key+"'");
+            stm.executeUpdate("DELETE FROM campeonatos WHERE NomeCamp='"+key+"'");
         } catch (Exception e) {
             // Database error!
             e.printStackTrace();
@@ -161,12 +168,7 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {	// falta adicionar cenas
-            // stm.execute("UPDATE robots SET Rota=NULL");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
-            // stm.executeUpdate("TRUNCATE rotas");
-            // stm.executeUpdate("TRUNCATE arestasRotas");
-            // stm.executeUpdate("TRUNCATE arestas");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
+            stm.executeUpdate("TRUNCATE campeonatos");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
@@ -196,19 +198,22 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
 	// Método que devolve uma collection com todos os objetos campeonatos presentes na base de dados
     // É lançada exceção caso haja algum problema com a base de dados
 	public Collection<Campeonato> values() {
-		Collection<Campeonato> col = new HashSet<>();
+		Collection<Campeonato> res = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("")) {	// "SELECT Codigo FROM arestas"
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT NomeCamp FROM campeonatos")) { // ResultSet com os ids de todas as turmas
             while (rs.next()) {
-                // col.add(this.get(rs.getString("Codigo"))); // falta adicionar cenas acho eu
+                String idC = rs.getString(1);
+                Campeonato c = this.get(idC);
+                res.add(c);
             }
         } catch (Exception e) {
+            // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return col;
-	}
+        return res;
+    }
 
 	@Override
 	// Método que devolve um set com todos "pares" formados pelo nome do campeonato e o objeto campeonato correspondente

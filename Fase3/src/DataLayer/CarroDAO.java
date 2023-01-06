@@ -10,6 +10,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import BussinessLayer.SubCarro.Carro;
+import BussinessLayer.SubCarro.GT;
+import BussinessLayer.SubCarro.C1;
+import BussinessLayer.SubCarro.C1H;
+import BussinessLayer.SubCarro.C2;
+import BussinessLayer.SubCarro.C2H;
+import BussinessLayer.SubCarro.GTH;
+import BussinessLayer.SubCarro.SC;
 
 public class CarroDAO implements Map<Integer,Carro>{
 	private static CarroDAO singleton = null;
@@ -17,7 +24,7 @@ public class CarroDAO implements Map<Integer,Carro>{
 	private CarroDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-            String sql = "CREATE TABLE IF NOT EXISTS carro (" +
+            String sql = "CREATE TABLE IF NOT EXISTS carros (" +
                     "CarID INT NOT NULL PRIMARY KEY," +
                     "Categoria varchar(10) NOT NULL ," +
                     "Marca varchar(45) DEFAULT NULL ," +
@@ -56,7 +63,7 @@ public class CarroDAO implements Map<Integer,Carro>{
 		int i = 0;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			Statement stm = conn.createStatement();
-			ResultSet rs = stm.executeQuery("######")) {	// falta adicionar isto
+			ResultSet rs = stm.executeQuery("SELECT count(*) FROM carros")) {	// falta adicionar isto
             if(rs.next()) {
                 i = rs.getInt(1);
             }
@@ -82,7 +89,7 @@ public class CarroDAO implements Map<Integer,Carro>{
         try	(Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			Statement stm = conn.createStatement();
 			ResultSet rs =
-			stm.executeQuery("'"+key.toString()+"'")) {	// falta adicionar cenas
+			stm.executeQuery("SELECT CarId FROM carros WHERE CarID='"+key.toString()+"'")) {	// falta adicionar cenas
             r = rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -105,9 +112,9 @@ public class CarroDAO implements Map<Integer,Carro>{
 		Carro a = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("'"+key+"'")) {	// falta adicionar cenas
+            ResultSet rs = stm.executeQuery("SELECT * FROM carros WHERE CarId='"+key+"'")) {	// falta adicionar cenas
             if (rs.next()) {  // A chave existe na tabela
-                // TODO
+                
             }
         } catch (SQLException e) {
             // Database error!
@@ -122,24 +129,61 @@ public class CarroDAO implements Map<Integer,Carro>{
     // É lançada exceção caso haja algum problema relativo á database
 	public Carro put(Integer key, Carro c) {
 		Carro res = null;
-        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement()) {
-            if(this.containsKey(key)){
-                res = this.get(key);
-            }
-            else {
-                // Actualizar o aluno
-                stm.executeUpdate(		// falta ver como tratar de meter a taxa de deterioração se o carro for GT e a PoteciaE se o carro for eletrico (podemos utilizar "instaceof") exemplo: if c instanceof GT
+        if (!this.containsKey(key)) {
+            try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+                 Statement stm = conn.createStatement()) {
+                // Actualizar a turma
+                if(c.getClass() == C1H.class) {
+                    C1H c1= (C1H) c;
+                    stm.executeUpdate(		
+                        "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
+                        + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +((C1H)c).getPotenciaE() + "', '" + "NULL" + "')");
+                }
+                else if(c.getClass() == C2H.class) {
+                    C2H c1= (C2H) c;
+                    stm.executeUpdate(		
+                        "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
+                        + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +((C2H)c).getPotenciaE() + "', '" + "NULL" + "')");
+                }
+                else if(c.getClass() == GTH.class) {
+                    GTH c1= (GTH) c;
+                    stm.executeUpdate(		
+                        "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
+                        + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +((GTH)c).getPotenciaE() + "', '" + ((GTH)c).getTaxaDeterioracao() + "')");
+                }
+                else if (c.getClass() == SC.class){
+                    SC c1= (SC) c;
+                    stm.executeUpdate(		
                         "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
                         + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +"NULL" + "', '" + "NULL" + "')");
+                }
+                else if(c.getClass() == GT.class) {
+                    GT c1= (GT) c;
+                    stm.executeUpdate(		
+                        "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
+                        + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +"NULL" + "', '" + ((GT)c).getTaxaDeterioracao() + "')");
+                }
+                else if(c.getClass() == C1.class) {
+                    C1 c1= (C1) c;
+                    stm.executeUpdate(		
+                        "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
+                        + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +"NULL" + "', '" + "NULL" + "')");
+                }
+                else if(c.getClass() == C2.class) {
+                    C2 c1= (C2) c;
+                    stm.executeUpdate(		
+                        "INSERT INTO carro VALUES ('" + c.getCarID() + "', '" + c.getMarca() + "', '" + c.getModelo() + "', '" + c.getCilindrada() + "','" + c.getPotenciaICE() + "', '" 
+                        + c.getFiabilidade() + "', '"+ c.getDownforce() + "', '" + c.getEstadoPneus() + "', '" + c.getTipoPneus() + "', '" + c.getModoMotor() + "', " +"NULL" + "', '" + "NULL" + "')");
+                }
+
+            } catch (SQLException e) {
+                // Database error!
+                e.printStackTrace();
+                throw new NullPointerException(e.getMessage());
             }
-        } catch (SQLException e) {
-             //Database error!
-            e.printStackTrace();
-            throw new NullPointerException(e.getMessage());
         }
         return res;
-	}
+    }
 
 	@Override
 	// Método que remove da tabela dos carros na database, o cicuito cujo carId é passado como argumento.
@@ -149,7 +193,7 @@ public class CarroDAO implements Map<Integer,Carro>{
 		Carro t = this.get(key);
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-            // stm.executeUpdate("DELETE FROM arestas WHERE Codigo='"+key+"'");
+            stm.executeUpdate("DELETE FROM carros WHERE CarID='"+key+"'");
         } catch (Exception e) {
             // Database error!
             e.printStackTrace();
@@ -173,12 +217,9 @@ public class CarroDAO implements Map<Integer,Carro>{
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {	// falta adicionar cenas
-            // stm.execute("UPDATE robots SET Rota=NULL");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
-            // stm.executeUpdate("TRUNCATE rotas");
-            // stm.executeUpdate("TRUNCATE arestasRotas");
-            // stm.executeUpdate("TRUNCATE arestas");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
+            
+            stm.executeUpdate("TRUNCATE carros");
+            
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();

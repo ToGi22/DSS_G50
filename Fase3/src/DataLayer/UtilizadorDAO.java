@@ -17,13 +17,13 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	private UtilizadorDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-             String sql = "CREATE TABLE IF NOT EXISTS arestas (" +
+             String sql = "CREATE TABLE IF NOT EXISTS utilizador (" +
                      "CodUtil varchar(10) NOT NULL PRIMARY KEY," +
                      "Email varchar(45) NOT NULL" +
                      "Password varchar(45) NOT NULL" +
                      "PontuacaoGlobal INT NOT NULL" +
-                     "IsAdmin BIT DEFAULT NULL" +
-                     "IsPremium BIT DEFAULT NULL";
+                     "IsAdmin INT DEFAULT 0" +
+                     "IsPremium INT DEFAULT 0";
              stm.executeUpdate(sql);
 			;
         } catch (SQLException e) {
@@ -96,9 +96,16 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 		Utilizador a = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("'"+key+"'")) {	// falta adicionar cenas
+            ResultSet rs = stm.executeQuery("SELECT * FROM administrador WHERE CodUtil='"+key+"'")) {	// falta adicionar cenas
             if (rs.next()) {  // A chave existe na tabela
-                // TODO
+                int isAdmin =rs.getInt(5);
+                int isPremium = rs.getInt(6);
+                boolean bool1 = false;
+                boolean bool2 = false;
+                if (isAdmin != 0) bool1 = true;
+                if (isPremium !=0) bool2= true; 
+                
+                a = new Utilizador(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),bool1,bool2);
             }
         } catch (SQLException e) {
             // Database error!
@@ -120,8 +127,20 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
             }
             else {
                 // Actualizar o aluno
+                int bool1 = 0;
+                int bool2 = 0;
+                if (u.getIsAdmin() == false){
+                    bool1 = 0;
+                }
+                else bool1 = 1;
+                if (u.getIsPremium() == false){
+                    bool2 = 0;
+                }
+                else bool2 = 1;
+                        
                 stm.executeUpdate(		// falta adicionar cenas
-                        "INSERT INTO arestas VALUES ('" + u.getCodUtil() + "', '" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getPontuacaoGlobal() + "', '" + u.getIsAdmin() + "', '" + u.getIsPremium() + "') " );
+                     
+                        "INSERT INTO arestas VALUES ('" + u.getCodUtil() + "', '" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getPontuacaoGlobal() + "', '" + bool1 + "', '" + bool2 + "') " );
             }
         } catch (SQLException e) {
             // Database error!
@@ -139,7 +158,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 		Utilizador t = this.get(key);
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-            // stm.executeUpdate("DELETE FROM arestas WHERE Codigo='"+key+"'");
+            stm.executeUpdate("DELETE FROM administrador WHERE CodUtil='"+key+"'");
         } catch (Exception e) {
             // Database error!
             e.printStackTrace();
@@ -163,12 +182,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	public void clear() {
 		try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {	// falta adicionar cenas
-            // stm.execute("UPDATE robots SET Rota=NULL");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 0");
-            // stm.executeUpdate("TRUNCATE rotas");
-            // stm.executeUpdate("TRUNCATE arestasRotas");
-            // stm.executeUpdate("TRUNCATE arestas");
-            // stm.executeUpdate("SET FOREIGN_KEY_CHECKS = 1");
+            stm.executeUpdate("TRUNCATE utlizador");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
@@ -198,19 +212,22 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 	// Método que devolve uma collection com todos os objetos utilizadors presentes na base de dados
     // É lançada exceção caso haja algum problema com a base de dados
 	public Collection<Utilizador> values() {
-		Collection<Utilizador> col = new HashSet<>();
+		Collection<Utilizador> res = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-            Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("")) {	// "SELECT Codigo FROM arestas"
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT Username FROM administrador")) { // ResultSet com osusernames de todas as turmas
             while (rs.next()) {
-                // col.add(this.get(rs.getString("Codigo"))); // falta adicionar cenas acho eu
+                String idC = rs.getString("CodUtil"); // Obtemos um username do carro do ResultSet
+                Utilizador c = this.get(idC);                    // Utilizamos o get para construir os carros uma a uma
+                res.add(c);                                 // Adiciona o carro ao resultado.
             }
         } catch (Exception e) {
+            // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return col;
-	}
+        return res;
+    }
 
 	@Override
 	// Método que devolve um set com todos "pares" formados pelo nome do utilizador e o objeto utilizador correspondente
