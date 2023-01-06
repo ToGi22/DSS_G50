@@ -1,36 +1,42 @@
 package BussinessLayer.SubCarro;
 
-public class GT extends Carro{
+import java.util.Random;
 
-    int taxaDeterioracao;
+public class GT extends Carro{
+    private double taxaDeterioracao;
     
 
-    public GT(double downforce, double fiabilidade, int estadoPneus, String marca, String modelo, int carID, int potenciaICE, int cilindrada, String categoria, TipoPneus tipoPneus, ModoMotor modoMotor,int taxaDeterioracao) {
-        super(downforce, fiabilidade, estadoPneus, marca, modelo, carID, potenciaICE, cilindrada, categoria, tipoPneus, modoMotor);
+    public GT(double downforce, double fiabilidade, int estadoPneus, String marca, String modelo, 
+                int carID, int potenciaICE, int cilindrada, String categoria, TipoPneus tipoPneus, 
+                ModoMotor modoMotor,double taxaDeterioracao) {
+
+        super(downforce, fiabilidade, estadoPneus, marca, modelo, carID, 
+                potenciaICE, cilindrada, categoria, tipoPneus, modoMotor);
+
         this.taxaDeterioracao = taxaDeterioracao;
     }
 
-    public GT(Carro carro,int taxaDeterioracao) {
+    public GT(Carro carro, double taxaDeterioracao) {
         super(carro);
         this.taxaDeterioracao = taxaDeterioracao;
     }
- 
-    public int getTaxaDeterioracao() {
+
+    public double getTaxaDeterioracao() {
         return taxaDeterioracao;
     }
 
-    public void setTaxaDeterioracao(int taxaDeterioracao) {
+    public void setTaxaDeterioracao(double taxaDeterioracao) {
         this.taxaDeterioracao = taxaDeterioracao;
     }
 
-    public int decrementaFiabilidadeGT(int nVoltas,int fiabilidade,int taxaDeterioracao){ //taxa deterioracao hardcoded
-        while (nVoltas >= 0){
-            fiabilidade = fiabilidade - (taxaDeterioracao * fiabilidade);
-        }
-        return fiabilidade;
+    // Função que gera a taxa de deterioração de um automóvel da categoria GT
+    public void geraTaxaDeterioracao() {
+        Random random = new Random();
+        double min = 0.1;
+        double max = 0.5;
+        double num = min + random.nextDouble() * (max - min);
+
+        this.setTaxaDeterioracao(num);
     }
-
-
-
 
 }

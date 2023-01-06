@@ -71,8 +71,6 @@ public class Piloto {
         this.nacionalidade = nacionalidade;
     }
 
-    // --- Métodos ---
-
     // Função para verificar a perícia CTS (Chuva vs Tempo Seco)
     public boolean verificaCts(){
         return (this.getCts() >= 0 && this.getCts() <= 1);
@@ -83,18 +81,4 @@ public class Piloto {
         return (this.getSva() >= 0 && this.getSva() <= 1);
     }
 
-    // Função para validar o nome do piloto
-    // O nome deve começar com uma letra
-    // O nome deve ter entre 5 a 29 caracteres
-    public static boolean verificaPiloto(String nomePiloto)
-    {
-
-        String regex = "^[A-Za-z]\\w{5,29}$";
-        Pattern p = Pattern.compile(regex);
-        if (nomePiloto == null) {
-            return false;
-        }
-        Matcher m = p.matcher(nomePiloto);
-        return m.matches();
-    }
 }

@@ -1,4 +1,4 @@
-package uminho.dss.trabalhopratico.ui;
+package UI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,33 +7,18 @@ import java.util.Scanner;
 
 public class Menu {
     public boolean logged;
-    /**
-     * Functional interface para handlers.
-     */
-    public interface Handler {  // método de tratamento
+    public interface Handler {
         public void execute();
     }
-
-    /**
-     * Functional interface para pré-condições.
-     */
-    public interface PreCondition {  // Predicate ?
+    public interface PreCondition { 
         public boolean validate();
     }
-
-    // Varíável de classe para suportar leitura
     private static Scanner is = new Scanner(System.in);
-
-    // Variáveis de instância
-    private List<String> opcoes;            // Lista de opções
-    private List<PreCondition> disponivel;  // Lista de pré-condições
-    private List<Handler> handlers;         // Lista de handlers
-
-    // Construtor
-
-    /**
-     * Constructor for objects of class NewMenu
-     */
+    private List<String> opcoes;            
+    private List<PreCondition> disponivel;  
+    private List<Handler> handlers;       
+    
+    // Constructor for objects of class NewMenu
     public Menu(String[] opcoes) {
         this.opcoes = Arrays.asList(opcoes);
         this.disponivel = new ArrayList<>();
@@ -45,12 +30,10 @@ public class Menu {
         });
     }
 
-    // Métodos de instância
+    // --- Métodos ---
 
     /**
-     * Correr o NewMenu.
-     * <p>
-     * Termina com a opção 0 (zero).
+     * Método para correr o Newmenu
      */
     public void run() {
         int op;
@@ -87,11 +70,7 @@ public class Menu {
         this.handlers.set(i - 1, h);
     }
 
-    // Métodos auxiliares
-
-    /**
-     * Apresentar o NewMenu
-     */
+    // Método para representação visual do menu
     private void show() {
         System.out.println("--------------------------------------------");
         System.out.println("                    Menu                    ");
@@ -107,9 +86,9 @@ public class Menu {
         System.out.println("--------------------------------------------");
     }
 
-    /**
-     * Ler uma opção válida
-     */
+    /** Função que realiza a leitura das opções
+    * Retorna uma string de erro caso leia uma opção inválida
+    */
     private int readOption() {
         int op=0;
 
