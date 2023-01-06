@@ -96,7 +96,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
 		Utilizador a = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM administrador WHERE CodUtil='"+key+"'")) {	// falta adicionar cenas
+            ResultSet rs = stm.executeQuery("SELECT * FROM utilizador WHERE CodUtil='"+key+"'")) {	// falta adicionar cenas
             if (rs.next()) {  // A chave existe na tabela
                 int isAdmin =rs.getInt(5);
                 int isPremium = rs.getInt(6);
@@ -140,7 +140,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
                         
                 stm.executeUpdate(		// falta adicionar cenas
                      
-                        "INSERT INTO arestas VALUES ('" + u.getCodUtil() + "', '" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getPontuacaoGlobal() + "', '" + bool1 + "', '" + bool2 + "') " );
+                        "INSERT INTO utilizador VALUES ('" + u.getCodUtil() + "', '" + u.getEmail() + "', '" + u.getPassword() + "', '" + u.getPontuacaoGlobal() + "', '" + bool1 + "', '" + bool2 + "') " );
             }
         } catch (SQLException e) {
             // Database error!

@@ -2,6 +2,8 @@ package BussinessLayer.SubSimulacao;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import BussinessLayer.SubCampeonato.Campeonato;
@@ -123,4 +125,5 @@ public class Simulacao {
 	public void iniciaSimulacao() {
 		
 	}
+
 }

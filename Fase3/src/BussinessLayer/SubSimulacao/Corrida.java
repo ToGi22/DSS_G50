@@ -1,10 +1,14 @@
 package BussinessLayer.SubSimulacao;
 
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import BussinessLayer.SubCampeonato.Circuito;
+import BussinessLayer.SubCampeonato.Segmentos.SegmentoEstrada;
 import BussinessLayer.SubCarro.Carro;
+import util.Pair;
 
 public class Corrida {
 	public enum Clima{
@@ -18,6 +22,7 @@ public class Corrida {
 	private Clima clima;
 	private Circuito circuito;
 	private Map<String,Carro> classificacao;
+	private List<Pair<Carro,Integer>> positions;
 
 	public Corrida() {
 		this.voltaAtual = 0;
@@ -34,7 +39,7 @@ public class Corrida {
 		this.isPremium = isPremium;
 		this.clima = clima;
 		this.circuito = circuito;
-		this.classificacao = classificacao;
+		this.classificacao = classificacao;	
 	}
 	
 	public Corrida(Corrida c) {
@@ -97,6 +102,37 @@ public class Corrida {
 
 	public void setClassificacao(Map<String,Carro> classificacao) {
 		this.classificacao = classificacao;
+	}
+	
+	public boolean avaria(Carro c){ // rever esta formulação é provavel que isto tenha demasiada porbabilidade de haver avarias
+		
+		return ThreadLocalRandom.current().nextDouble(0,100) % 1000 < c.getFiabilidade(); 
+	}
+	
+	public double probabilidadeUltrapassagem(int cilindrada, int potencia , int gdu, int svaPiloto, int ctsPiloto, int sva, Clima meteo){ //modo motor e downforce
+		
+		double probabilidade = 0.0;
+		double habilidadePilotoChuva = 1 - ctsPiloto;
+
+		if(meteo == Clima.CHUVA){
+			probabilidade = 0.4 * habilidadePilotoChuva + 0.4 * (double) (cilindrada / potencia) * gdu + 0.2 * (1.0 - sva);
+		}
+		else{
+			probabilidade = 0.4 * ctsPiloto + 0.4 * (double) (cilindrada / potencia) * gdu + 0.2 * (1.0 - sva);
+		}
+		
+		return probabilidade;
+	}
+
+	public boolean ultrapassa(Carro c){
+		
+		if(avaria(c)){
+			return false;
+		}
+
+
+		return true;
+
 	}
 
 }
