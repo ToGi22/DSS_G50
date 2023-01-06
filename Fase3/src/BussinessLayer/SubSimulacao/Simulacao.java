@@ -1,9 +1,13 @@
-package BussinessLayer.RacingSimulator;
+package BussinessLayer.SubSimulacao;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import BussinessLayer.SubCampeonato.Campeonato;
+import BussinessLayer.SubCarro.Carro;
+import BussinessLayer.SubPiloto.Piloto;
+import util.Pair;
 
 public class Simulacao {
 	private int corridaAtual;
@@ -11,30 +15,53 @@ public class Simulacao {
 	private Map<String,Integer> afinacoes;
 	private int nrMaxAfinacoes;
 	private Campeonato campeonato;
+	private Map<String,Pair<Carro,Piloto>> jogadores;
+	private Corrida corrida;
 
-
+	
 	public Simulacao() {
 		this.corridaAtual = 0;
-		this.pontuacaoCamp = null;
-		this.afinacoes = null;
+		this.pontuacaoCamp = new HashMap<>();
+		this.afinacoes = new HashMap<>();
 		this.nrMaxAfinacoes = 0;
 		this.campeonato = null;
+		this.jogadores = new HashMap<>();
+		this.corrida = new Corrida();
 	}
 
-	public Simulacao(int corridaAtual, Map<String,Integer> pontuacaoCamp, Map<String,Integer> afinacoes, int nrMaxAfinacoes, Campeonato campeonato) {
+	public Simulacao(Campeonato campeonato, Map<String,Pair<Carro,Piloto>> jogadores){
+		this.corridaAtual = 0;
+		this.pontuacaoCamp = new HashMap<>();
+		for(Map.Entry<String,Pair<Carro,Piloto>> entry : jogadores.entrySet())
+		this.pontuacaoCamp.put(entry.getKey(), 0);
+		this.afinacoes = new HashMap<>();
+		for(Map.Entry<String,Pair<Carro,Piloto>> entry : jogadores.entrySet())
+			this.afinacoes.put(entry.getKey(), 0);
+			this.nrMaxAfinacoes = 2*(campeonato.getNrCorridas()/3);
+			this.campeonato = campeonato;
+		this.jogadores = jogadores;
+		this.corrida = new Corrida();
+	}
+
+	public Simulacao(int corridaAtual, Map<String,Integer> pontuacaoCamp, Map<String,Integer> afinacoes,
+	int nrMaxAfinacoes, Campeonato campeonato, Map<String,Pair<Carro,Piloto>> jogadores, Corrida corrida) {
 		this.corridaAtual = corridaAtual;
 		this.pontuacaoCamp = pontuacaoCamp;
 		this.afinacoes = afinacoes;
 		this.nrMaxAfinacoes = nrMaxAfinacoes;
 		this.campeonato = campeonato;
+		this.jogadores = jogadores;
+		this.corrida = corrida;
 	}
-	
+
 	public Simulacao(Simulacao s) {
 		this.corridaAtual = s.getCorridaAtual();
 		this.pontuacaoCamp = s.getPontuacaoCamp();
 		this.afinacoes = s.getAfinacoes();
 		this.nrMaxAfinacoes = s.getNrMaxAfinacoes();
 		this.campeonato = s.getCampeonato();
+		this.jogadores = s.getJogadores();
+		this.corrida = s.getCorrida();
 	}
 
 	public int getCorridaAtual() {
@@ -77,4 +104,23 @@ public class Simulacao {
 		this.campeonato = campeonato;
 	}
 
+	public Map<String,Pair<Carro,Piloto>> getJogadores() {
+		return this.jogadores;
+	}
+	
+	public void setJogadores(Map<String,Pair<Carro,Piloto>> jogadores) {
+		this.jogadores = jogadores;
+	}
+
+	public Corrida getCorrida() {
+		return this.corrida;
+	}
+	
+	public void setCorrida(Corrida corrida) {
+		this.corrida = corrida;
+	}
+
+	public void iniciaSimulacao() {
+		
+	}
 }
