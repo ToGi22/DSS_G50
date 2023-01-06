@@ -12,11 +12,12 @@ public class SimulacaoFacade implements ISimulacao{
 	private Simulacao simulacao;
 
 
-	public SimulacaoFacade(Campeonato campeonato, Map<String, Pair<Carro, Piloto>> jogadores) {
-		this.simulacao = new Simulacao(campeonato, jogadores);
+	public SimulacaoFacade() {
+		this.simulacao = new Simulacao();
 	}
 
-	public void simulacao() {
-		this.simulacao.iniciaSimulacao();
+	public void simulacao(Campeonato campeonato, Map<String, Pair<Carro, Piloto>> jogadores) {
+		this.simulacao.configuraSimulacao(campeonato, jogadores);
+		this.simulacao.proximaCorrida();
 	}
 }
