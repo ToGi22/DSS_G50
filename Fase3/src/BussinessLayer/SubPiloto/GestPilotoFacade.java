@@ -44,4 +44,14 @@ public class GestPilotoFacade implements IPiloto{
         return pilotos.containsKey(nomePiloto);
     }
 
+    // Função para verificar a perícia CTS (Chuva vs Tempo Seco)
+    public boolean verificaCts(double cts){
+        return (cts >= 0 && cts <= 1);
+    }
+
+    // Função para verificar a perícia SVA (Segurança vs Agressividade)
+    public boolean verificaSva(double sva){
+        return (sva >= 0 && sva <= 1);
+    }
+
 }

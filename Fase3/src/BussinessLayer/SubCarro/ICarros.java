@@ -9,8 +9,5 @@ public interface ICarros {
     public void registaGT(String marca, String modelo, int cilindrada, int downforce, int potenciaICE);
     public void registaGTHibrido(String marca, String modelo, int cilindrada, int downforce, int potenciaICE, int potenciaE);
     public int decrementaFiabilidadeGT(int nVoltas, int fiabilidade, int taxaDeterioracao);
-    public void geraFiabilidade();
-    public void atualizaEstadoPneu();
-    public boolean verificaPac();
-    public void geraTaxaDeterioracao();
+    public boolean verificaPac(double downforce);
 }

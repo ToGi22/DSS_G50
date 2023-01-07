@@ -98,4 +98,9 @@ public class GestCarroFacade implements ICarros {
         }
         return fiabilidade;
     }
+
+    // Função que verifica se o valor de PAC de um carro é válido
+    public boolean verificaPac(double downforce){
+        return (downforce >= 0 && downforce <= 1);
+    }
 }

@@ -70,15 +70,4 @@ public class Piloto {
     public void setNacionalidade(String nacionalidade) {
         this.nacionalidade = nacionalidade;
     }
-
-    // Função para verificar a perícia CTS (Chuva vs Tempo Seco)
-    public boolean verificaCts(){
-        return (this.getCts() >= 0 && this.getCts() <= 1);
-    }
-
-    // Função para verificar a perícia SVA (Segurança vs Agressividade)
-    public boolean verificaSva(){
-        return (this.getSva() >= 0 && this.getSva() <= 1);
-    }
-
 }

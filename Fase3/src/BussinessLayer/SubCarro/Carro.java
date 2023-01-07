@@ -209,10 +209,4 @@ public class Carro {
             // TO-DO falta criar excecoes
         }
     }
-
-    // Função que verifica se o valor de PAC de um carro é válido
-    public boolean verificaPac(){
-        return (this.downforce >= 0 && this.downforce <= 1);
-    }
 }
-
