@@ -3,9 +3,11 @@ package BussinessLayer.SubCampeonato;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import BussinessLayer.SubCampeonato.Segmentos.SegmentoEstrada;
 import DataLayer.CampeonatoDAO;
 import DataLayer.CircuitoDAO;
 
@@ -24,13 +26,8 @@ public class GestCampeonatoFacade implements ICampeonato{
         this.circuitos.put(c.getNomeCir(),c);
     }
 
-    public void registaCampeonato(String nomeCamp, int nrMaxParticipantes, ArrayList<String> listaCircuitosIntegrantes){
-        ArrayList<Circuito>circuitosIntegrantes = new ArrayList<>();
-        for (String m : listaCircuitosIntegrantes){
-            Circuito circuito = this.circuitos.get(m);
-            circuitosIntegrantes.add(circuito);
-        }
-        Campeonato camp = new Campeonato(nomeCamp, nrMaxParticipantes, circuitosIntegrantes);
+    public void registaCampeonato(String nomeCamp, int nrMaxParticipantes, ArrayList<Circuito> listaCircuitosIntegrantes){
+        Campeonato camp = new Campeonato(nomeCamp, nrMaxParticipantes, listaCircuitosIntegrantes);
         this.campeonatos.put(camp.getNomeCamp(), camp);
     }
 
@@ -98,4 +95,34 @@ public class GestCampeonatoFacade implements ICampeonato{
         return circuitos.containsKey(nomeCir);
     }
 
+    public ArrayList<Circuito> getCircuitos(){
+        ArrayList<Circuito> r = new ArrayList<>();
+        for (Entry<String,Circuito> iterador : circuitos.entrySet()) {
+            r.add(iterador.getValue());
+        }
+        return r;
+    }
+
+    public ArrayList<Segmentos> assemble(ArrayList<Segmentos> lista,int n_chicanes, int ncurvas){
+        int nretas = n_chicanes + ncurvas;
+        ArrayList<Segmentos> seg = new ArrayList<Segmentos>();
+        int iterator = 0;
+        for (int i = 0; iterator < lista.size();i++){
+            if (nretas !=0){
+            
+                if (i % 2 != 0){
+                    seg.add(lista.get(iterator));
+                    iterator++;
+                }
+                else {
+                    Segmentos n = new Segmentos(SegmentoEstrada.RETA,-1);
+                    seg.add(n);
+                    nretas--;
+                    
+                }
+                
+            }
+        }
+        return seg;
+    }
 }

@@ -21,7 +21,7 @@ public class CircuitoDAO implements Map<String,Circuito>{
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
                 String sql = "CREATE TABLE IF NOT EXISTS circuito (" +
-                            "nomeCir VARCHAR(30) NOT NULL PRIMARY KEY ," +
+                            "nomeCir VARCHAR(30) NOT NULL PRIMARY KEY," +
                             "distancia DOUBLE NOT NULL,"+
                             "nVoltas INT NOT NULL," +
                             "tempoBox INT NOT NULL)";

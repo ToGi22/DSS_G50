@@ -18,14 +18,13 @@ public class PilotoDAO implements Map<String,Piloto>{
 	private PilotoDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-             String sql = "CREATE TABLE IF NOT EXISTS piloto (" +
-                     "nomePiloto varchar(10) NOT NULL PRIMARY KEY," +
-                     "cts DOUBLE NOT NULL," +
-                     "sva DOUBLE NOT NULL," +
-                     "nacionalidade varchar(45) NOT NULL,"+
-                     "PRIMARY KEY nomePiloto)";
-             stm.executeUpdate(sql);
-			
+            String sql = "CREATE TABLE IF NOT EXISTS piloto (" +
+                        "nomePiloto varchar(10) NOT NULL PRIMARY KEY," +
+                        "cts DOUBLE NOT NULL," +
+                        "sva DOUBLE NOT NULL," +
+                        "nacionalidade varchar(45) NOT NULL)";
+            stm.executeUpdate(sql);
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());

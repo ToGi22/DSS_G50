@@ -29,11 +29,15 @@ public class GT extends Carro{
         this.taxaDeterioracao = taxaDeterioracao;
     }
 
+    public static boolean verificaCilindrada(int cilindrada){
+        return(cilindrada >= 2000 && cilindrada <= 4000);
+    }
+
     // Função que gera a taxa de deterioração de um automóvel da categoria GT
     public void geraTaxaDeterioracao() {
         Random random = new Random();
-        double min = 0.0035;
-        double max = 0.0075;
+        double min = 0.035;
+        double max = 0.075;
         double num = min + random.nextDouble() * (max - min);
 
         this.setTaxaDeterioracao(num);

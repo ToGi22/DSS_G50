@@ -13,8 +13,8 @@ public class C2 extends Carro{
         super(carro);
     }
 
-    public boolean verificaCilindrada(){
-        return(this.getCilindrada() >= 3000 && this.getCilindrada() <= 5000);
+    public static boolean verificaCilindrada(int cilindrada){
+        return(cilindrada >= 3000 && cilindrada <= 5000);
     }
     
     public boolean verificaFiabilidade(){

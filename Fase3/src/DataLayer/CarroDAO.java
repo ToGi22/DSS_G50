@@ -25,21 +25,20 @@ public class CarroDAO implements Map<Integer,Carro>{
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS carros (" +
-                    "CarID INT NOT NULL PRIMARY KEY," +
-                    "Categoria varchar(10) NOT NULL ," +
-                    "Marca varchar(45) DEFAULT NULL ," +
-                    "Modelo varchar(45) DEFAULT NULL," +
-                    "Cilindrada INT NOT NULL," +
-                    "PotenciaICE INT NOT NULL," +
-                    "Fiabilidade INT NOT NULL," +
-                    "Downforce INT NOT NULL"+
-                    "EstadoPneus INT NOT NULL,"+
-                    "TipoPneus varchar(45) NOT NULL,"+
-                    "ModoMotor varchar(45) NOT NULL,"+
-                    "PotenciaE INT DEFAULT NULL,"+
-                    "TaxaDeterioracaoGT INT DEFAULT NULL)"
+                    "carID INT NOT NULL PRIMARY KEY," +
+                    "categoria varchar(10) NOT NULL," +
+                    "marca varchar(45) NOT NULL," +
+                    "modelo varchar(45) NOT NULL," +
+                    "cilindrada INT NOT NULL," +
+                    "potenciaICE INT NOT NULL," +
+                    "fiabilidade INT NOT NULL," +
+                    "downforce INT NOT NULL,"+
+                    "estadoPneus INT NOT NULL,"+
+                    "tipoPneus varchar(45) NOT NULL,"+
+                    "modoMotor varchar(45) NOT NULL,"+
+                    "potenciaE INT NOT NULL,"+
+                    "taxaDeterioracaoGT INT NOT NULL)";
 
-                                                                                                                    ;
             stm.executeUpdate(sql);
 			
         } catch (SQLException e) {

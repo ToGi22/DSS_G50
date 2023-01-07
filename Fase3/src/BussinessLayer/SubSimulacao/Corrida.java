@@ -8,14 +8,14 @@ import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
-import javax.lang.model.util.ElementScanner14;
-
 import BussinessLayer.SubCampeonato.Circuito;
 import BussinessLayer.SubCampeonato.Segmentos;
 import BussinessLayer.SubCampeonato.Segmentos.SegmentoEstrada;
 import BussinessLayer.SubCarro.C1H;
 import BussinessLayer.SubCarro.C2H;
 import BussinessLayer.SubCarro.Carro;
+import BussinessLayer.SubCarro.GestCarroFacade;
+import BussinessLayer.SubCarro.GT;
 import BussinessLayer.SubCarro.GTH;
 import BussinessLayer.SubCarro.Carro.ModoMotor;
 import BussinessLayer.SubCarro.Carro.TipoPneus;
@@ -232,6 +232,18 @@ public class Corrida {
 
 				}
 			}
+			for(Pair<Carro,Integer> iterator : classificacao){
+                Carro carro = iterator.getFirst();
+                if(carro.getClass() == GT.class){
+                    double d = GestCarroFacade.decrementaFiabilidadeGT(voltaAtual,carro.getFiabilidade(),((GT)carro).getTaxaDeterioracao());
+					carro.setFiabilidade(d);
+                }
+                else if(carro.getClass() == GTH.class){
+                    double d = GestCarroFacade.decrementaFiabilidadeGT(voltaAtual,carro.getFiabilidade(),((GTH)carro).getTaxaDeterioracao());
+					carro.setFiabilidade(d);
+                }
+            }
+			voltaAtual++;
 		}
 		List<Pair<Integer,String>> resultado = new ArrayList<>();
 		for (Pair<Carro,Integer> iterador : classificacao)
