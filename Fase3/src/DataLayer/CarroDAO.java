@@ -37,11 +37,11 @@ public class CarroDAO implements Map<Integer,Carro>{
                     "TipoPneus varchar(45) NOT NULL,"+
                     "ModoMotor varchar(45) NOT NULL,"+
                     "PotenciaE INT DEFAULT NULL,"+
-                    "TaxaDeterioracaoGT INT DEFAULT NULL,"
+                    "TaxaDeterioracaoGT INT DEFAULT NULL)"
 
                                                                                                                     ;
             stm.executeUpdate(sql);
-			;
+			
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
