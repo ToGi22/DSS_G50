@@ -15,6 +15,7 @@ import BussinessLayer.SubCarro.C1H;
 import BussinessLayer.SubCarro.C2H;
 import BussinessLayer.SubCarro.Carro;
 import BussinessLayer.SubCarro.GTH;
+import BussinessLayer.SubCarro.Carro.ModoMotor;
 import BussinessLayer.SubCarro.Carro.TipoPneus;
 import BussinessLayer.SubPiloto.Piloto;
 import util.Pair;
@@ -239,8 +240,61 @@ public class Corrida {
 	}
 
 	public double fatorClimaCarro (Carro carro){
-		// if 
-		return 0.0;
+			double downforce = carro.getDownforce();
+			double probabilidade;
+			if (this.getClima() == Clima.CHUVA){
+				if(carro.getTipoPneus() == TipoPneus.CHUVA ){
+					if(carro.getModoMotor() == ModoMotor.AGRESSIVO){
+						probabilidade = downforce * 2 +  2;
+					}
+					else if (carro.getModoMotor() == ModoMotor.CONSERVADOR){
+						probabilidade = downforce * 2 - 1;
+					}
+					else probabilidade = downforce * 2 + 0.5;
+				}
+				else{
+					if(carro.getModoMotor() == ModoMotor.AGRESSIVO){
+						probabilidade = downforce * 2 +  10;
+					}
+					else if (carro.getModoMotor() == ModoMotor.CONSERVADOR){
+						probabilidade = downforce * 2 + 3;
+					}
+					else probabilidade = downforce * 2 + 6;
+				}
+
+			}
+			else{
+				if(carro.getTipoPneus() == TipoPneus.CHUVA ){
+					if(carro.getModoMotor() == ModoMotor.AGRESSIVO){
+						probabilidade = downforce * 2 +  7;
+					}
+					else if (carro.getModoMotor() == ModoMotor.CONSERVADOR){
+						probabilidade = downforce * 2 + 2;
+					}
+					else probabilidade = downforce * 2 + 3.5;
+				}
+				else if (carro.getTipoPneus()== TipoPneus.MACIO){
+					if(carro.getModoMotor() == ModoMotor.AGRESSIVO){
+						probabilidade = downforce * 2 ;
+					}
+					else if (carro.getModoMotor() == ModoMotor.CONSERVADOR){
+						probabilidade = downforce * 2 - 10;
+					}
+					else probabilidade = downforce * 2 - 5;
+				}
+				else{
+					if(carro.getModoMotor() == ModoMotor.AGRESSIVO){
+						probabilidade = downforce * 2 + 2;
+					}
+					else if (carro.getModoMotor() == ModoMotor.CONSERVADOR){
+						probabilidade = downforce * 2 - 7;
+					}
+					else probabilidade = downforce * 2 - 3;
+				}
+			}
+			
+			
+		return probabilidade;
 	}
 
 	/**
