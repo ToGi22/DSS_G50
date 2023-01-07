@@ -4,13 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-<<<<<<< HEAD
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-=======
 import java.util.TreeMap;
 import java.util.Map.Entry;
->>>>>>> refs/remotes/origin/main
 import java.util.stream.Collectors;
 
 import BussinessLayer.SubCampeonato.Campeonato;
@@ -164,5 +159,4 @@ public class Simulacao {
 			this.corrida.simulaCorrida(c, jogadoresCorrida);
 		}
 	}
-
 }

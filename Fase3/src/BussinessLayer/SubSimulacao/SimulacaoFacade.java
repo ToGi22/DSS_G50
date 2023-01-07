@@ -1,6 +1,5 @@
 package BussinessLayer.SubSimulacao;
 
-import java.util.HashMap;
 import java.util.Map;
 import util.Pair;
 
@@ -16,8 +15,14 @@ public class SimulacaoFacade implements ISimulacao{
 		this.simulacao = new Simulacao();
 	}
 
-	public void simulacao(Campeonato campeonato, Map<String, Pair<Carro, Piloto>> jogadores) {
+	public Map<String,Integer> simulacao(Campeonato campeonato, Map<String, Pair<Carro, Piloto>> jogadores) {
 		this.simulacao.configuraSimulacao(campeonato, jogadores);
-		this.simulacao.proximaCorrida();
+		
+		for (int i = 0; i < this.simulacao.getCampeonato().getNrCorridas(); i++) {
+			this.simulacao.proximaCorrida();
+			
+		}
+
+		return null;
 	}
 }
