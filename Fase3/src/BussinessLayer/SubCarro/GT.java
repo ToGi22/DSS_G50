@@ -32,8 +32,8 @@ public class GT extends Carro{
     // Função que gera a taxa de deterioração de um automóvel da categoria GT
     public void geraTaxaDeterioracao() {
         Random random = new Random();
-        double min = 0.1;
-        double max = 0.5;
+        double min = 0.0035;
+        double max = 0.0075;
         double num = min + random.nextDouble() * (max - min);
 
         this.setTaxaDeterioracao(num);

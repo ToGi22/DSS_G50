@@ -24,10 +24,10 @@ public class CampeonatoDAO implements Map<String,Campeonato>{
                         "nrCorridas INT NOT NULL ,"+
                         "nrMaxParticipantes INT NOT NULL ,"+
                         "nomeCir varchar(45) NOT NULL ,"+
-                        "PRIMARY KEY (NomeCamp,nomeCir),"+
-                        "foreign key(nomeCir) references circuito(nomeCir))";
+                        "PRIMARY KEY(NomeCamp,nomeCir),"+
+                        "FOREIGN KEY(nomeCir) references circuito(nomeCir))";
              stm.executeUpdate(sql);
-			;
+			
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());

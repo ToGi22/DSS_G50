@@ -18,14 +18,15 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
              String sql = "CREATE TABLE IF NOT EXISTS utilizador (" +
-                     "CodUtil varchar(10) NOT NULL PRIMARY KEY," +
-                     "Email varchar(45) NOT NULL" +
-                     "Password varchar(45) NOT NULL" +
-                     "PontuacaoGlobal INT NOT NULL" +
-                     "IsAdmin INT DEFAULT 0" +
-                     "IsPremium INT DEFAULT 0";
+                     "codUtil varchar(10) NOT NULL," +
+                     "email varchar(45) NOT NULL" +
+                     "password varchar(45) NOT NULL" +
+                     "pontuacaoGlobal INT NOT NULL" +
+                     "isAdmin INT NOT NULL" +
+                     "isPremium INT NOT NULL,"+
+                     "PRIMARY KEY codUtil)";
              stm.executeUpdate(sql);
-			;
+			
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
