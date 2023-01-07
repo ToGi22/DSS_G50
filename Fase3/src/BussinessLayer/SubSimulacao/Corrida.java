@@ -11,7 +11,11 @@ import java.util.stream.Collectors;
 import BussinessLayer.SubCampeonato.Circuito;
 import BussinessLayer.SubCampeonato.Segmentos;
 import BussinessLayer.SubCampeonato.Segmentos.SegmentoEstrada;
+import BussinessLayer.SubCarro.C1H;
+import BussinessLayer.SubCarro.C2H;
 import BussinessLayer.SubCarro.Carro;
+import BussinessLayer.SubCarro.GTH;
+import BussinessLayer.SubCarro.Carro.TipoPneus;
 import BussinessLayer.SubPiloto.Piloto;
 import util.Pair;
 
@@ -22,11 +26,11 @@ public class Corrida {
 	}
 
 	private int voltaAtual;
-	private Map<Piloto, String> desistencias;
+	private Map<Carro, String> desistencias;
 	private Boolean isPremium;
 	private Clima clima;
 	private Circuito circuito;
-	private Map<Piloto,Carro> carros;
+	private Map<Integer,Piloto> pilotos;
 	private List<Pair<Carro,Integer>> classificacao;
 
 	public Corrida() {
@@ -36,18 +40,18 @@ public class Corrida {
 		this.clima = null;
 		this.circuito = null;
 		this.classificacao = new ArrayList<>();
-		this.carros = new HashMap<>();
+		this.pilotos = new HashMap<>();
 	}
 
-	public Corrida(int voltaAtual, Map<Piloto,String> desistencias, Boolean isPremium,
-					Clima clima, Circuito circuito, ArrayList<Pair<Carro,Integer>> classificacao, Map<Piloto,Carro> carros) {
+	public Corrida(int voltaAtual, Map<Carro,String> desistencias, Boolean isPremium,
+					Clima clima, Circuito circuito, ArrayList<Pair<Carro,Integer>> classificacao, Map<Integer,Piloto> carros) {
 		this.voltaAtual = voltaAtual;
 		this.desistencias = desistencias;
 		this.isPremium = isPremium;
 		this.clima = clima;
 		this.circuito = circuito;
 		this.classificacao = classificacao;
-		this.carros = carros;
+		this.pilotos = carros;
 	}
 	
 	public Corrida(Corrida c) {
@@ -57,7 +61,7 @@ public class Corrida {
 		this.clima = c.getClima();
 		this.circuito = c.getCircuito();
 		this.classificacao = c.getClassificacao();
-		this.carros = c.getCarros();
+		this.pilotos = c.getPilotos();
 	}
 
 	public int getVoltaAtual() {
@@ -68,11 +72,11 @@ public class Corrida {
 		this.voltaAtual = voltaAtual;
 	}
 
-	public Map<Piloto,String> getDesistencias() {
-		return (Map<Piloto,String>) this.desistencias.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+	public Map<Carro,String> getDesistencias() {
+		return (Map<Carro,String>) this.desistencias.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
 	}
 
-	public void setDesistencias(Map<Piloto,String> desistencias) {
+	public void setDesistencias(Map<Carro,String> desistencias) {
 		this.desistencias = desistencias;
 	}
 
@@ -113,12 +117,12 @@ public class Corrida {
 		this.classificacao = classificacao;
 	}
 	
-	public Map<Piloto,Carro> getCarros() {
-		return this.carros;
+	public Map<Integer,Piloto> getPilotos() {
+		return this.pilotos;
 	}
 	
-	public void setCarros(Map<Piloto,Carro> carros) {
-		this.carros = carros;
+	public void setPilotos(Map<Integer,Piloto> carros) {
+		this.pilotos = carros;
 	}
 
 	// --- Métodos ---
@@ -132,7 +136,7 @@ public class Corrida {
 		this.setCircuito(c);
 		for (Pair<Carro,Piloto> iterador : jogadores) {
 			this.classificacao.add(new Pair<Carro,Integer>(iterador.getFirst(), 0));
-			this.carros.put(iterador.getSecond(),iterador.getFirst());
+			this.pilotos.put(iterador.getFirst().getCarID(), iterador.getSecond());
 		}
 		if (ThreadLocalRandom.current().nextBoolean())
 			this.clima = Clima.SOLARENGO;
@@ -142,11 +146,64 @@ public class Corrida {
 		int numeroDeVoltas = this.getCircuito().getNumeroVoltas();
 		while(voltaAtual < numeroDeVoltas) {
 			for (Segmentos segmento : this.getCircuito().getListaSegmentos()) {
-				for (int i = 1; i < this.getClassificacao().size(); i++) {
-					if (avaria(this.classificacao.get(i).getFirst())) {
+				int i = 1;
+				while (i < this.getClassificacao().size()) {
+					Carro carro = this.classificacao.get(i).getFirst();
+
+					if (avaria(this.classificacao.get(i).getFirst())){
 						Carro desistencia = this.classificacao.remove(i).getFirst();
-						// this.desistencias.put()
+						this.desistencias.put(desistencia, "");
 					}
+
+					// else if () {
+					// 	// despiste/colisao
+					// } 
+
+					else if(carro.getClass() == C1H.class) {
+						int potencia = carro.getPotenciaICE() + ((C1H)carro).getPotenciaE();
+						Piloto piloto = pilotos.get(carro.getCarID());
+						double p = probabilidadeUltrapassagem(carro.getCilindrada(), potencia, segmento.getGdu(), piloto.getCts(), piloto.getSva(), this.clima);
+						if (ultrapassa(p)){
+							this.trocarPosicoesClassificacao(i, i+1);
+							i += 2;
+						}
+						else
+							i++;
+					}
+					else if(carro.getClass() == C2H.class) {
+						int potencia = carro.getPotenciaICE() + ((C2H)carro).getPotenciaE();
+						Piloto piloto = pilotos.get(carro.getCarID());
+						double p = probabilidadeUltrapassagem(carro.getCilindrada(), potencia, segmento.getGdu(), piloto.getCts(), piloto.getSva(), this.clima);
+						if (ultrapassa(p)){
+							this.trocarPosicoesClassificacao(i, i+1);
+							i += 2;
+						}
+						else
+							i++;
+					}
+					else if(carro.getClass() == GTH.class) {
+						int potencia = carro.getPotenciaICE() + ((GTH)carro).getPotenciaE();
+						Piloto piloto = pilotos.get(carro.getCarID());
+						double p = probabilidadeUltrapassagem(carro.getCilindrada(), potencia, segmento.getGdu(), piloto.getCts(), piloto.getSva(), this.clima);
+						if (ultrapassa(p)){
+							this.trocarPosicoesClassificacao(i, i+1);
+							i += 2;
+						}
+						else
+							i++;
+					}
+					else {
+						int potencia = carro.getPotenciaICE();
+						Piloto piloto = pilotos.get(carro.getCarID());
+						double p = probabilidadeUltrapassagem(carro.getCilindrada(), potencia, segmento.getGdu(), piloto.getCts(), piloto.getSva(), this.clima);
+						if (ultrapassa(p)){
+							this.trocarPosicoesClassificacao(i, i+1);
+							i += 2;
+						}
+						else
+							i++;
+					}
+
 				}
 			}
 		}
@@ -165,32 +222,60 @@ public class Corrida {
 	public boolean avaria(Carro c){ // rever esta formulação é provavel que isto tenha demasiada porbabilidade de haver avarias
 		return ThreadLocalRandom.current().nextDouble(0,100) % 1000 < c.getFiabilidade(); 
 	}
-	
-	public double probabilidadeUltrapassagem(int cilindrada, int potencia , int gdu, int svaPiloto, int ctsPiloto, int sva, Clima meteo){ //modo motor e downforce
+
+	public double probabilidadeUltrapassagem(int cilindrada, int potencia , int gdu, double ctsPiloto, double svaPiloto, Clima meteo){ //modo motor e downforce
 		
 		double probabilidade = 0.0;
 		double habilidadePilotoChuva = 1 - ctsPiloto;
 	
 		if(meteo == Clima.CHUVA){
-			probabilidade = 0.4 * habilidadePilotoChuva + 0.4 * (double) (cilindrada / potencia) * gdu + 0.2 * (1.0 - sva);
+			probabilidade = 0.4 * habilidadePilotoChuva + 0.4 * (double) (cilindrada / potencia) * gdu + 0.2 * (1.0 - svaPiloto);
 		}
 		else{
-			probabilidade = 0.4 * ctsPiloto + 0.4 * (double) (cilindrada / potencia) * gdu + 0.2 * (1.0 - sva);
+			probabilidade = 0.4 * ctsPiloto + 0.4 * (double) (cilindrada / potencia) * gdu + 0.2 * (1.0 - svaPiloto);
 		}
 		
 		return probabilidade;
 	}
-	
-	public boolean ultrapassa(Carro c){
-		
-		if(avaria(c)){
-			return false;
-		}
-	
-		return true;
+
+	public double fatorClimaCarro (Carro carro){
+		// if 
+		return 0.0;
 	}
 
-	
+	/**
+	 * @param segmento
+	 * @param carro
+	 * @param ultrapassagem true quando o carro esta a ultrapassar (serve para aumentar as probabilidades de colisao e despiste)
+	 * @return 0 para quando nao acontece nada; 1 para quando se despista mas sem quasar qualquer colisao; 2 quando colide com o carro da frente
+	 */
+	public int colisaoDespiste(Segmentos segmento, Carro carro, boolean ultrapassagem){
+		if (segmento.getSegmento() == SegmentoEstrada.RETA){
+			if (ThreadLocalRandom.current().nextInt(0,100) < 1)
+				return 2;
+		}
+		else {
+			double p = 10 + (carro.getDownforce() - 0.5)*2 + this.fatorClimaCarro(carro);
+			if (ThreadLocalRandom.current().nextInt(0,100) < p)
+				if (ThreadLocalRandom.current().nextInt(0,100) > 20)
+					return 1;
+				else
+					return 2;
+		}
+		return 0;
+	}
+
+	public boolean ultrapassa(double probabilidade){
+		
+		if (ThreadLocalRandom.current().nextDouble(0,1) < probabilidade){
+			// if(avaria(c)){
+			// 	return false;
+			// }
+			return true;
+		}
+		return false;
+	}
+
 	public void move(){ // checa se nesta iteração algum carro ultrapassou e se sim adianta -o 2 posições em vez de uma
 		for (Pair<Carro,Integer> iterator : this.classificacao){
 			if(ultrapassa(iterator.getFirst())){
