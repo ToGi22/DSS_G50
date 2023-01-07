@@ -198,7 +198,7 @@ public class Corrida {
 		}
 	}
 
-	public void ultrapassa(){ // checa se nesta iteração algum carro ultrapassou e se sim adianta -o 2 posições em vez de uma
+	public void moveUltrapassa(){ // checa se nesta iteração algum carro ultrapassou e se sim adianta -o 2 posições em vez de uma
 		for (Pair<Carro,Integer> iterator : this.classificacao){
 			if(ultrapassa(iterator.getFirst())){
 				iterator.setSecond(iterator.getSecond()+2);
