@@ -152,6 +152,16 @@ public class Corrida {
 		}
 	}
 
+	/**
+	 * @param x
+	 * @param y
+	 */
+	public void trocarPosicoesClassificacao(int x, int y){
+		Pair<Carro,Integer> temp = this.classificacao.get(x);
+		this.classificacao.set(x, this.classificacao.get(y));
+		this.classificacao.set(y, temp);
+	}
+
 	public boolean avaria(Carro c){ // rever esta formulação é provavel que isto tenha demasiada porbabilidade de haver avarias
 		return ThreadLocalRandom.current().nextDouble(0,100) % 1000 < c.getFiabilidade(); 
 	}
