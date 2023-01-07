@@ -12,6 +12,7 @@ import BussinessLayer.SubSimulacao.ISimulacao;
 import BussinessLayer.SubSimulacao.SimulacaoFacade;
 import BussinessLayer.SubUtilizador.GestUtilizadorFacade;
 import BussinessLayer.SubUtilizador.IUtilizador;
+import BussinessLayer.SubUtilizador.Utilizador;
 
 /**
  * TextUI
@@ -47,5 +48,32 @@ public class TextUI {
 		});
 		menu.setPreCondition(1,()-> !logged);
         menu.setPreCondition(2,()-> !logged);
+
+		menu.setHandler(1,()->{
+            int tom = -1;
+            for (int i = 0; tom < 0 || tom > 2; i++) {
+                if (i > 0)
+                    System.out.println("A opção escolhida não se encontra nas opções disponíveis!\n");
+                System.out.println("Selecione o tipo de utilizador que pretende");
+                System.out.println("1-> Jogador");
+                System.out.println("2-> Administrador");
+                System.out.println("0-> Terminar Operação");
+                tom = scin.nextInt();
+                if (tom!=0) {
+                    System.out.println("Insira o seu nome de utilizador!");
+                    String username = scin.nextLine();
+                    System.out.println("Insira a sua password!");
+                    String password = scin.nextLine();
+                    if (tom==1) {
+                        Utilizador.registaUtil(username, password);
+                    }
+                    else {
+                        Utilizador.addAdministrador(username,password);
+                    }
+                }
+            }
+        });
 	}
+
+	
 }
