@@ -243,6 +243,10 @@ public class Corrida {
 					carro.setFiabilidade(d);
                 }
             }
+			for(Pair<Carro,Integer> iterator : this.classificacao){
+                Carro carro = iterator.getFirst();
+                carro.atualizaEstadoPneu();
+            }
 			voltaAtual++;
 		}
 		List<Pair<Integer,String>> resultado = new ArrayList<>();

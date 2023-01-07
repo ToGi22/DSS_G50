@@ -5,7 +5,7 @@ public interface IUtilizador {
     public void registaAdmin(String codUtil);
     public boolean autenticaUtilizador(String codUtil, String password);
     public boolean verificaMail(String email);
-    public Boolean verificaPass(String password);
+    public boolean verificaPass(String password);
     public void addPontuacaoGlobal(String codUtil, int pontuacaoCampeonato);
     public boolean verificaUtilizador(String codUtil);
 }

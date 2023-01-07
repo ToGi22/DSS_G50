@@ -15,7 +15,7 @@ public class GestUtilizadorFacade implements IUtilizador{
 
     // Função que regista um objeto utilizador na base de dados
     public void registaUtilizador(String codUtil, String password, String email, boolean isPremium){
-        Utilizador util = new Utilizador(codUtil, password, email, 0, null, null);
+        Utilizador util = new Utilizador(codUtil, password, email, 0, false, isPremium);
         this.utilizadores.put(util.getCodUtil(), util);
     }
 
@@ -63,7 +63,7 @@ public class GestUtilizadorFacade implements IUtilizador{
     * Uma palavra passe deve conter pelo menos um caracter especial (@, #, $, %, ! ou ?)
     * Uma palavra passe deve ter entre 6 a 20 caracteres
     */
-    public Boolean verificaPass(String password) {
+    public boolean verificaPass(String password) {
         String regex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!?]).{6,20}$";
 
         Pattern pattern = Pattern.compile(regex);

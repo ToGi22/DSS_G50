@@ -73,7 +73,7 @@ public class UtilizadorDAO implements Map<String,Utilizador>{
         try	(Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
 			Statement stm = conn.createStatement();
 			ResultSet rs =
-			stm.executeQuery("'"+key.toString()+"'")) {	// falta adicionar cenas
+            stm.executeQuery("SELECT codUtil FROM utilizador WHERE codUtil='"+key.toString()+"'")) {
             r = rs.next();
         } catch (SQLException e) {
             e.printStackTrace();

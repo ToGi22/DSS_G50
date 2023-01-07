@@ -1,7 +1,6 @@
 package UI;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import BussinessLayer.SubCampeonato.Circuito;
@@ -31,6 +30,7 @@ public class TextUI {
 
 	// Scanner para leitura
 	private Scanner scin;
+	private Scanner scin2;
 
 	public TextUI() {
 		this.modelCampeonato = new GestCampeonatoFacade();
@@ -39,6 +39,7 @@ public class TextUI {
 		this.modelUtilizador = new GestUtilizadorFacade();
 		this.modelSimulacao = new SimulacaoFacade();
 		this.scin = new Scanner(System.in);
+        this.scin2 = new Scanner(System.in);
 	}
 
 	public void run() {
@@ -53,6 +54,10 @@ public class TextUI {
 		});
 		menu.setPreCondition(1,()-> !logged);
         menu.setPreCondition(2,()-> !logged);
+        menu.setPreCondition(3,()-> logged);
+        menu.setPreCondition(4,()-> logged);
+        menu.setPreCondition(5,()-> logged);
+        menu.setPreCondition(6,()-> logged);
 
 		menu.setHandler(1,()->{
             int tom = -1;
@@ -63,19 +68,32 @@ public class TextUI {
                 System.out.println("1-> Jogador");
                 System.out.println("2-> Administrador");
                 System.out.println("0-> Terminar Operação");
-                tom = scin.nextInt();
+                tom = scin2.nextInt();
                 if (tom!=0) {
                     System.out.println("Insira o seu nome de utilizador!");
                     String username = scin.nextLine();
+                    while(modelUtilizador.verificaUtilizador(username) == false){
+                        System.out.println("Este nome de utilizador ja existe por favor insira um diferente");
+                        username = scin.nextLine();
+                    }
                     System.out.println("Insira a sua password!");
                     String password = scin.nextLine();
-                    System.out.println("Insira a sua password!");
+                    while(modelUtilizador.verificaPass(password) == false){
+                        System.out.println("A password e muito fraca.\nA password deve ter no minimo 6 a 20 carateres, conter uma maiuscula, uma minuscula, um digito e um carater especial (@, #, $, %, ! ou ?)");
+                        password = scin.nextLine();
+                    }
+                    System.out.println("Insira o seu email!");
                     String email = scin.nextLine();
+                    while(modelUtilizador.verificaPass(email) == false){
+                        System.out.println("O email introduzido nao esta dentro das normas.");
+                        email = scin.nextLine();
+                    }
                     if (tom==1) {
                         this.modelUtilizador.registaUtilizador(username, password, email, false);
                     }
                     else {
                         this.modelUtilizador.registaUtilizador(username, password, email, false);
+                        this.modelUtilizador.registaAdmin(username);
                     }
                 }
             }
@@ -90,7 +108,7 @@ public class TextUI {
                 System.out.println("1-> Jogador");
                 System.out.println("2-> Administrador");
                 System.out.println("0-> Terminar Operação");
-                tom = scin.nextInt();
+                tom = scin2.nextInt();
                 if (tom!=0) {
                     System.out.println("Insira o seu nome de utilizador!");
                     String username = scin.nextLine();
@@ -99,9 +117,6 @@ public class TextUI {
                     if (tom==1) {
                         System.out.println(modelUtilizador.autenticaUtilizador(username, password));
                     }
-                    // else {
-                    //     System.out.println(f1m.validaAdministrador(username,password));
-                    // }
                 }
             }
         });
@@ -111,9 +126,7 @@ public class TextUI {
                 System.out.println("Insira a nome do circuito:");
                 String nomeCir = scin.nextLine();
                 System.out.println("Insira a distância do circuito:");
-                double distancia = scin.nextDouble();
-                int num_curvas = 0;
-                int num_chicanes = 0;
+                double distancia = scin2.nextDouble();
                 int opt=-1;
                 ArrayList<Segmentos> segmentos = new ArrayList<>();
                 int nCurvas = 0, nChicanes = 0;
@@ -125,10 +138,10 @@ public class TextUI {
                         System.out.println("1-> Curva (" + Integer.toString(nCurvas) + ")");
                         System.out.println("2-> Chicane (" + Integer.toString(nChicanes) + ")");
                         System.out.println("0-> Terminar Operação");
-                        opt = scin.nextInt();
+                        opt = scin2.nextInt();
                         if (opt != 0) {
                             System.out.println("Insira o grau de dificuldade de ultrapassagem (Valor entre 0 e 1):");
-                            int gdu = scin.nextInt();
+                            int gdu = scin2.nextInt();
 							Segmentos s;
                             if (opt == 1) {
 								s = new Segmentos(SegmentoEstrada.CURVA, gdu);
@@ -142,18 +155,19 @@ public class TextUI {
                         }
                     }
                 }
+                segmentos = modelCampeonato.assemble(segmentos, nChicanes, nCurvas);
                 for (Segmentos iterador : segmentos) {
                     if(iterador.getGdu() == -1)
                         System.out.println("Insira o grau de dificuldade de ultrapassagem da reta (Valor entre 0 e 1):");
-                        int gdu = scin.nextInt();
+                        int gdu = scin2.nextInt();
                         while(gdu < 0 ||  gdu > 1) {
                             System.out.println("Insira o grau de dificuldade de ultrapassagem da reta CORRETAMENTE (VALOR ENTRE 0 e 1):");
-                            gdu = scin.nextInt();
+                            gdu = scin2.nextInt();
                         }
                         iterador.setGdu(gdu);
                 }
                 System.out.println("Insira o número de voltas do circuito:");
-                int numeroVoltas = scin.nextInt();
+                int numeroVoltas = scin2.nextInt();
                 modelCampeonato.registaCircuito(nomeCir, distancia,numeroVoltas,segmentos);
             }
             catch (Exception e) {
@@ -170,14 +184,14 @@ public class TextUI {
                     if ((i < 0 || i > 1) && i != 0)
                         System.out.println("O valor indicado não é válido!\n");
                     System.out.println("Insira a sua habilidade Chuva vs Tempo Seco (Valor entre 0 e 1)");
-                    chuvaVsSeco = scin.nextDouble();
+                    chuvaVsSeco = scin2.nextDouble();
                 }
                 double SegVSAgre= -1;
                 for (int i = 0; SegVSAgre < 0 || SegVSAgre > 1; i++) {
                     if ((i < 0 || i > 1) && i != 0)
                         System.out.println("O valor indicado não é válido!\n");
                     System.out.println("Insira a sua habilidade Segurança vs Agressividade (Valor entre 0 e 1)");
-                    SegVSAgre = scin.nextDouble();
+                    SegVSAgre = scin2.nextDouble();
                 }
                 System.out.println("Insira a nacionalidade do Piloto a registar");
                 String nacionalidade = scin.nextLine();
@@ -199,7 +213,7 @@ public class TextUI {
                         System.out.println("A opção escolhida não se encontra nas opções disponíveis!\n");
                     System.out.println("1-> Adicionar um novo Circuito ao Campeonato");
                     System.out.println("0-> Terminar Operação");
-                    opt = scin.nextInt();
+                    opt = scin2.nextInt();
                     if (opt==1) {
                         ArrayList<Circuito> circ = modelCampeonato.getCircuitos();
                         for (Circuito c : circ) {
@@ -218,10 +232,10 @@ public class TextUI {
                     }
                 }
                 System.out.println("Insira o numero maximo de participantes para este campeonato (Valor entre 2 e 30):");
-                int nrMaxParticipantes = scin.nextInt();
+                int nrMaxParticipantes = scin2.nextInt();
                 while(nrMaxParticipantes < 2 ||  nrMaxParticipantes > 30) {
                     System.out.println("Insira o numero maximo de participantes para este campeonato CORRETAMENTE (VALOR ENTRE 2 e 30):");
-                    nrMaxParticipantes = scin.nextInt();
+                    nrMaxParticipantes = scin2.nextInt();
                 }
                 modelCampeonato.registaCampeonato(nome, nrMaxParticipantes, circuitos);
             }
@@ -247,18 +261,18 @@ public class TextUI {
                         System.out.println("3-> Classe Grand Turismo");
                         System.out.println("4-> Stock Cars");
                         System.out.println("0-> Terminar Operação");
-                        opt = scin.nextInt();
+                        opt = scin2.nextInt();
                         int cilindrada = 0;
                         if (opt == 2 || opt == 3) {
                                 while (!modelCarro.verificaCilindrada(cilindrada)) {
                                     System.out.println("Insira a cilindrada do carro:");
-                                    cilindrada = scin.nextInt();
+                                    cilindrada = scin2.nextInt();
                                 }
                         }
                         System.out.println("Insira a potência do motor de combustão do carro:");
-                        int potenciaICE = scin.nextInt();
+                        int potenciaICE = scin2.nextInt();
                         System.out.println("Insira o downforce do carro (valor 0 a 1):");
-                        double downforce = scin.nextDouble();
+                        double downforce = scin2.nextDouble();
                         if (opt ==1 || opt==2 || opt==3) {
                             int opt1 = -1;
                             for (int j = 0; opt1<1 || opt1>2; j++) {
@@ -268,11 +282,11 @@ public class TextUI {
                                     System.out.println("Selecione o tipo de veículo a adicionar:");
                                     System.out.println("1-> Combustão");
                                     System.out.println("2-> Híbrido");
-                                    opt1 = scin.nextInt();
+                                    opt1 = scin2.nextInt();
                                 }
                                 if (opt1==2) {
                                     System.out.println("Insira a potência do motor elétrico do carro:");
-                                    int potenciaE = scin.nextInt();
+                                    int potenciaE = scin2.nextInt();
                                     if (opt == 3) {
                                         modelCarro.registaGTHibrido(marca, modelo, cilindrada, downforce, potenciaICE, potenciaE);
                                     }

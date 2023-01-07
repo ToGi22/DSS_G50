@@ -195,18 +195,13 @@ public class Carro {
     // Função que atualiza o valor de estado de pneu 
     public void atualizaEstadoPneu(){
         int estadoAtual = this.getEstadoPneus();
-        ModoMotor modoMotorAtual = this.getModoMotor();
-        if (modoMotorAtual == ModoMotor.NORMAL) {
-            this.setEstadoPneus(estadoAtual - 2);
+        TipoPneus tipoPneus = this.getTipoPneus();
+        if (tipoPneus == TipoPneus.DURO) {
+            this.setEstadoPneus(estadoAtual - 3);
         }
-        else if (modoMotorAtual == ModoMotor.CONSERVADOR){
-            this.setEstadoPneus(estadoAtual - 1); 
+        else if (tipoPneus == TipoPneus.MACIO){
+            this.setEstadoPneus(estadoAtual - 5); 
         }
-        else if (modoMotorAtual == ModoMotor.AGRESSIVO){
-            this.setEstadoPneus(estadoAtual - 4);
-        }
-        else {
-            // TO-DO falta criar excecoes
-        }
+        else this.setEstadoPneus(estadoAtual - 2);
     }
 }
