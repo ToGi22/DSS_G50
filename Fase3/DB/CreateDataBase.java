@@ -1,24 +1,23 @@
 
+
+import DataLayer.DAOconfig;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.SQLException;
 
-public class CreateDataBase {
-   static final String DB_URL = "jdbc:mysql://localhost/";
-   static final String USER = "guest";
-   static final String PASS = "guest123";
-
-   public static void main(String[] args) {
-      // Open a connection
-      try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-         Statement stmt = conn.createStatement();
-      ) {		      
-         String sql = "CREATE DATABASE IF NOT EXISTS Data";
-         stmt.executeUpdate(sql);
-         System.out.println("Database created successfully...");   	  
-      } catch (SQLException e) {
-         e.printStackTrace();
-      } 
-   }
+public class CreateDataBase 
+{
+    public static void main(String[] args) throws ClassNotFoundException {
+        try(Connection conn = DAOconfig.getConnectionNoDatabase();
+            Statement stmt = conn.createStatement();) 
+        {
+            String sql = "CREATE DATABASE IF NOT EXISTS "+DAOconfig.getDatabaseName()+";";
+            int result = stmt.executeUpdate(sql);
+            if (result == 1) System.out.println("Database created successfully...");
+        } catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+    }
 }

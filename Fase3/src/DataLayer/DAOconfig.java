@@ -1,10 +1,29 @@
 package DataLayer;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class DAOconfig {
-    static final String USERNAME = "jfc";                       // Actualizar
-    static final String PASSWORD = "jfc";                       // Actualizar
-    private static final String DATABASE = "turmas3la";          // Actualizar
-    //private static final String DRIVER = "jdbc:mariadb";        // Usar para MariaDB
-    private static final String DRIVER = "jdbc:mysql";        // Usar para MySQL
-    static final String URL = DRIVER+"://localhost:3306/"+DATABASE+"?serverTimezone=UTC";
+    static final String DB_Piloto = "jdbc:mysql";
+
+    static final String DB_HOST = "localhost";
+    static final String DB_PORT = "3306";
+    static final String DB_DATABASE = "RacingSimulator";
+
+    static final String USERNAME = "guest";
+    static final String PASSWORD = "guest123";
+
+    static final String URL = DB_Piloto+"://"+DB_HOST+":"+DB_PORT+"/";
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL + DB_DATABASE, USERNAME, PASSWORD);
+    }
+    public static Connection getConnectionNoDatabase() throws SQLException {
+        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+    }
+
+    public static String getDatabaseName() {
+        return DB_DATABASE;
+    }
 }
