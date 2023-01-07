@@ -54,11 +54,11 @@ public class GestCampeonatoFacade implements ICampeonato{
 
     // Função para validar o nome do campeonato
     // O nome deve começar com uma letra
-    // O nome deve ter entre 5 a 29 caracteres
-    public static boolean verificaNomeCamp(String nomeCamp)
+    // O nome deve ter entre 3 a 29 caracteres
+    public static boolean validaNomeCamp(String nomeCamp)
     {
 
-        String regex = "^[A-Za-z]\\w{5,29}$";
+        String regex = "^[A-Za-z]\\w{3,29}$";
 
         Pattern p = Pattern.compile(regex);
 
@@ -72,11 +72,11 @@ public class GestCampeonatoFacade implements ICampeonato{
 
     // Função para validar o nome do circuito
     // O nome deve começar com uma letra
-    // O nome deve ter entre 5 a 29 caracteres
-    public static boolean verificaNomeCir(String nomeCir)
+    // O nome deve ter entre 3 a 29 caracteres
+    public static boolean validaNomeCir(String nomeCir)
     {
 
-        String regex = "^[A-Za-z]\\w{5,29}$";
+        String regex = "^[A-Za-z]\\w{3,29}$";
 
         Pattern p = Pattern.compile(regex);
 
@@ -86,6 +86,16 @@ public class GestCampeonatoFacade implements ICampeonato{
         Matcher m = p.matcher(nomeCir);
 
         return m.matches();
+    }
+
+    // Função que verifica se não há nomes repetidos na lista de campeonatos
+    public boolean verificaNomeCamp(String nomeCamp){
+        return campeonatos.containsKey(nomeCamp);
+    }
+
+    // Função que verifica se não há nomes repetidos na lista de circuitos
+    public boolean verificaNomeCir(String nomeCir){
+        return circuitos.containsKey(nomeCir);
     }
 
 }
