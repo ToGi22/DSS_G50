@@ -189,4 +189,21 @@ public class Corrida {
 	
 		return true;
 	}
+
+	public void move(){ // adianta todos os carros uma posição
+		
+		for (Pair<Carro,Integer> iterator : this.classificacao){
+			iterator.setSecond(iterator.getSecond()+1);
+
+		}
+	}
+
+	public void ultrapassa(){ // checa se nesta iteração algum carro ultrapassou e se sim adianta -o 2 posições em vez de uma
+		for (Pair<Carro,Integer> iterator : this.classificacao){
+			if(ultrapassa(iterator.getFirst())){
+				iterator.setSecond(iterator.getSecond()+2);
+			}
+		}	
+	}
 }
+
