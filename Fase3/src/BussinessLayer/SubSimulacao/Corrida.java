@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+import javax.lang.model.util.ElementScanner14;
+
 import BussinessLayer.SubCampeonato.Circuito;
 import BussinessLayer.SubCampeonato.Segmentos;
 import BussinessLayer.SubCampeonato.Segmentos.SegmentoEstrada;
@@ -26,7 +28,7 @@ public class Corrida {
 	}
 
 	private int voltaAtual;
-	private Map<Carro, String> desistencias;
+	private List<Pair<Integer, String>> desistencias;
 	private Boolean isPremium;
 	private Clima clima;
 	private Circuito circuito;
@@ -35,7 +37,7 @@ public class Corrida {
 
 	public Corrida() {
 		this.voltaAtual = 0;
-		this.desistencias = new HashMap<>();
+		this.desistencias = new ArrayList<>();
 		this.isPremium = false;
 		this.clima = null;
 		this.circuito = null;
@@ -43,7 +45,7 @@ public class Corrida {
 		this.pilotos = new HashMap<>();
 	}
 
-	public Corrida(int voltaAtual, Map<Carro,String> desistencias, Boolean isPremium,
+	public Corrida(int voltaAtual, List<Pair<Integer, String>> desistencias, Boolean isPremium,
 					Clima clima, Circuito circuito, ArrayList<Pair<Carro,Integer>> classificacao, Map<Integer,Piloto> carros) {
 		this.voltaAtual = voltaAtual;
 		this.desistencias = desistencias;
@@ -72,11 +74,11 @@ public class Corrida {
 		this.voltaAtual = voltaAtual;
 	}
 
-	public Map<Carro,String> getDesistencias() {
-		return (Map<Carro,String>) this.desistencias.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+	public List<Pair<Integer, String>> getDesistencias() {
+		return (List<Pair<Integer, String>>) this.desistencias.stream().collect(Collectors.toList());
 	}
 
-	public void setDesistencias(Map<Carro,String> desistencias) {
+	public void setDesistencias(List<Pair<Integer, String>> desistencias) {
 		this.desistencias = desistencias;
 	}
 
@@ -128,11 +130,33 @@ public class Corrida {
 	// --- Métodos ---
 
 	/**
+	 * @param carro
+	 * @param motivo	0 o carro teve uma avaria; 1 quando o carro se despista; 2 quando o carro colide com o carro da frente 
+	 */
+	public void removeCarro(int carro, int motivo){
+		if (motivo == 0){
+			Carro desistencia = this.classificacao.remove(carro).getFirst();
+			this.desistencias.add(new Pair<>(desistencia.getCarID(), ""));
+		}
+		else if(motivo == 1){
+			Carro desistencia = this.classificacao.remove(carro).getFirst();
+			this.desistencias.add(new Pair<>(desistencia.getCarID(), ""));
+		}
+		else{
+			Carro desistencia = this.classificacao.remove(carro).getFirst();
+			this.desistencias.add(new Pair<>(desistencia.getCarID(), ""));
+			desistencia = this.classificacao.remove(carro-1).getFirst();
+			this.desistencias.add(new Pair<>(desistencia.getCarID(), ""));
+		}
+	}
+
+	/**
 	 * Configura as variaveis necessarias para a simulacao de uma corrida
 	 * @param c
 	 * @param jogadores
+	 * @return	lista com a classificacao da corrida, do 1.o para o ultimo, seguido das desistencias
 	 */
-	public void simulaCorrida(Circuito c, ArrayList<Pair<Carro,Piloto>> jogadores){
+	public List<Pair<Integer,String>> simulaCorrida(Circuito c, ArrayList<Pair<Carro,Piloto>> jogadores){
 		this.setCircuito(c);
 		for (Pair<Carro,Piloto> iterador : jogadores) {
 			this.classificacao.add(new Pair<Carro,Integer>(iterador.getFirst(), 0));
@@ -149,15 +173,16 @@ public class Corrida {
 				int i = 1;
 				while (i < this.getClassificacao().size()) {
 					Carro carro = this.classificacao.get(i).getFirst();
+					int evento;
+					if (avaria(this.classificacao.get(i).getFirst()))
+						removeCarro(i, 0);
 
-					if (avaria(this.classificacao.get(i).getFirst())){
-						Carro desistencia = this.classificacao.remove(i).getFirst();
-						this.desistencias.put(desistencia, "");
+					else if ((evento = colisaoDespiste(segmento, carro, false)) > 0) {
+						if (evento == 1)
+							removeCarro(i, evento);
+						else
+							removeCarro(i, evento);
 					}
-
-					// else if () {
-					// 	// despiste/colisao
-					// } 
 
 					else if(carro.getClass() == C1H.class) {
 						int potencia = carro.getPotenciaICE() + ((C1H)carro).getPotenciaE();
@@ -207,6 +232,12 @@ public class Corrida {
 				}
 			}
 		}
+		List<Pair<Integer,String>> resultado = new ArrayList<>();
+		for (Pair<Carro,Integer> iterador : classificacao)
+			resultado.add(new Pair<>(iterador.getFirst().getCarID(), null));
+		for (Pair<Integer,String> iterador : desistencias)
+			resultado.add(iterador);
+		return resultado;
 	}
 
 	/**
@@ -246,7 +277,7 @@ public class Corrida {
 	/**
 	 * @param segmento
 	 * @param carro
-	 * @param ultrapassagem true quando o carro esta a ultrapassar (serve para aumentar as probabilidades de colisao e despiste)
+	 * @param ultrapassagem true quando o carro esta a ultrapassar outro (serve para aumentar as probabilidades de colisao e despiste)
 	 * @return 0 para quando nao acontece nada; 1 para quando se despista mas sem quasar qualquer colisao; 2 quando colide com o carro da frente
 	 */
 	public int colisaoDespiste(Segmentos segmento, Carro carro, boolean ultrapassagem){
@@ -276,13 +307,13 @@ public class Corrida {
 		return false;
 	}
 
-	public void move(){ // checa se nesta iteração algum carro ultrapassou e se sim adianta -o 2 posições em vez de uma
-		for (Pair<Carro,Integer> iterator : this.classificacao){
-			if(ultrapassa(iterator.getFirst())){
-				iterator.setSecond(iterator.getSecond()+2);
-			}
-			else iterator.setSecond(iterator.getSecond()+1);
-		}	
-	}
+	// public void move(){ // checa se nesta iteração algum carro ultrapassou e se sim adianta -o 2 posições em vez de uma
+	// 	for (Pair<Carro,Integer> iterator : this.classificacao){
+	// 		if(ultrapassa(iterator.getFirst())){
+	// 			iterator.setSecond(iterator.getSecond()+2);
+	// 		}
+	// 		else iterator.setSecond(iterator.getSecond()+1);
+	// 	}	
+	// }
 }
 
