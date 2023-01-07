@@ -20,21 +20,20 @@ public class CircuitoDAO implements Map<String,Circuito>{
 	private CircuitoDAO() {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
             Statement stm = conn.createStatement()) {
-             String sql = "CREATE TABLE IF NOT EXISTS circuitos (" +
-                        "nomeCir varchar(30) NOT NULL," +
-                        "distancia double NOT NULL,"+
-                        "n_voltas int NOT NULL," +
-                        "TempoBox int NOT NULL,";
-
-                    sql = "CREATE TABLE IF NOT EXISTS SegmentoEstrada(" +
+                String sql = "CREATE TABLE IF NOT EXISTS circuito (" +
+                            "nomeCir VARCHAR(30) NOT NULL PRIMARY KEY ," +
+                            "distancia DOUBLE NOT NULL,"+
+                            "nVoltas INT NOT NULL," +
+                            "tempoBox INT NOT NULL)";
+                stm.executeUpdate(sql);
+                sql = "CREATE TABLE IF NOT EXISTS SegmentoEstrada(" +
                     "nomeCir varchar(30) NOT NULL," +
                     "tipoSegmento int NOT NULL,"+
                     "gdu double NOT NULL,"+
                     "PRIMARY KEY (nomeCir,tipoSegmento),"+
-                    "foreign key(nomeCir) references circuito(nomeCir))";
-             stm.executeUpdate(sql);
-			;
-        } catch (SQLException e) {
+                    "FOREIGN KEY(nomeCir) REFERENCES circuito(nomeCir))";
+                stm.executeUpdate(sql);
+            } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }

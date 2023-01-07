@@ -14,7 +14,7 @@ public class DAOconfig {
     static final String USERNAME = "guest";
     static final String PASSWORD = "guest123";
 
-    static final String URL = DB_Piloto+"://"+DB_HOST+":"+DB_PORT+"/";
+    static final String URL = DB_Piloto+"://"+DB_HOST+":"+DB_PORT+"/"+DB_DATABASE;
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL + DB_DATABASE, USERNAME, PASSWORD);

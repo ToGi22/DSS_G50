@@ -15,8 +15,8 @@ public class GestCampeonatoFacade implements ICampeonato{
     
 
     public GestCampeonatoFacade(){
-        this.campeonatos = CampeonatoDAO.getInstance();
         this.circuitos = CircuitoDAO.getInstance();
+        this.campeonatos = CampeonatoDAO.getInstance();
     }
 
     public void registaCircuito(String nomeCir, double distancia, int numeroVoltas, ArrayList<Segmentos> listaSegmentos){
